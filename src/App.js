@@ -617,7 +617,7 @@ const FieldForceSizing = () => {
                 <div className="p-6">
                   <div className="grid md:grid-cols-5 gap-6">
                     {/* Current Metrics */}
-                    <div className="bg-gray-50 rounded-lg p-3">
+                    <div className="bg-white rounded-lg p-3 border border-gray-200">
                       <h5 className="font-medium text-gray-700 mb-3 flex items-center text-xs">
                         <div className="w-2 h-2 bg-gray-400 rounded-full mr-1"></div>
                         Current State
@@ -643,8 +643,8 @@ const FieldForceSizing = () => {
                     </div>
 
                     {/* Optimized State */}
-                    <div className="bg-accent-light rounded-lg p-3">
-                      <h5 className="font-medium text-gray-700 mb-3 flex items-center text-xs">
+                    <div className="bg-white rounded-lg p-3 border-l-4 border-accent">
+                      <h5 className="font-medium text-accent-dark mb-3 flex items-center text-xs">
                         <div className="w-2 h-2 bg-accent rounded-full mr-1"></div>
                         Optimized State
                       </h5>
@@ -669,9 +669,9 @@ const FieldForceSizing = () => {
                     </div>
 
                     {/* Response Curve Insights */}
-                    <div className="bg-blue-50 rounded-lg p-3">
-                      <h5 className="font-medium text-gray-700 mb-3 flex items-center text-xs">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-1"></div>
+                    <div className="bg-white rounded-lg p-3 border-l-4 border-primary">
+                      <h5 className="font-medium text-primary-dark mb-3 flex items-center text-xs">
+                        <div className="w-2 h-2 bg-primary rounded-full mr-1"></div>
                         Response Pattern
                       </h5>
                       <div className="space-y-2">
@@ -691,8 +691,8 @@ const FieldForceSizing = () => {
                     </div>
 
                     {/* Business Impact */}
-                    <div className="bg-secondary-light rounded-lg p-3">
-                      <h5 className="font-medium text-gray-700 mb-3 flex items-center text-xs">
+                    <div className="bg-white rounded-lg p-3 border-l-4 border-secondary">
+                      <h5 className="font-medium text-secondary-dark mb-3 flex items-center text-xs">
                         <div className="w-2 h-2 bg-secondary rounded-full mr-1"></div>
                         Business Impact
                       </h5>
@@ -713,8 +713,8 @@ const FieldForceSizing = () => {
                     </div>
 
                     {/* AI Reasoning */}
-                    <div className="bg-orange-50 rounded-lg p-3">
-                      <h5 className="font-medium text-gray-700 mb-3 flex items-center text-xs">
+                    <div className="bg-white rounded-lg p-3 border-l-4 border-orange-500">
+                      <h5 className="font-medium text-orange-700 mb-3 flex items-center text-xs">
                         <div className="w-2 h-2 bg-orange-500 rounded-full mr-1"></div>
                         AI Analysis
                       </h5>
@@ -820,15 +820,15 @@ const FieldForceSizing = () => {
             </div>
 
             {/* Territory Summary */}
-            <div className="mt-8 bg-accent-light rounded-lg p-4 border border-accent-light">
+            <div className="mt-8 bg-white rounded-lg p-6 border-l-4 border-accent shadow-md">
               <div className="flex items-center justify-between">
                 <div>
-                  <h5 className="font-semibold text-accent-dark">Territory Optimization Impact</h5>
-                  <p className="text-sm text-accent-dark">Following simulation-based visit recommendations</p>
+                  <h5 className="font-semibold text-accent-dark text-lg">Territory Optimization Impact</h5>
+                  <p className="text-sm text-gray-600 mt-1">Following simulation-based visit recommendations</p>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-accent">+37 Rx/month</div>
-                  <div className="text-sm text-gray-600">+48% territory growth</div>
+                  <div className="text-3xl font-bold text-accent">+37 Rx/month</div>
+                  <div className="text-sm text-gray-500">+48% territory growth</div>
                 </div>
               </div>
             </div>

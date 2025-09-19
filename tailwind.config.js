@@ -6,25 +6,27 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#3B82F6', // blue-500
-          dark: '#2563EB',   // blue-600
-          light: '#60A5FA',  // blue-400
-          lighter: '#EFF6FF',// blue-50
+          DEFAULT: '#2563EB', // blue-600 - deeper, more professional
+          dark: '#1D4ED8',    // blue-700
+          light: '#3B82F6',   // blue-500
+          lighter: '#EFF6FF', // blue-50
         },
         secondary: {
-          DEFAULT: '#F97316', // orange-500
-          dark: '#EA580C',   // orange-600
-          light: '#FB923C',  // orange-400
+          DEFAULT: '#7C3AED', // violet-600 - sophisticated purple
+          dark: '#6D28D9',    // violet-700
+          light: '#8B5CF6',   // violet-500
+          lighter: '#F3E8FF', // violet-50
         },
         accent: {
-          DEFAULT: '#10B981', // green-500
-          dark: '#059669',   // green-600
-          light: '#34D399',  // green-400
+          DEFAULT: '#059669', // emerald-600 - professional green
+          dark: '#047857',    // emerald-700
+          light: '#10B981',   // emerald-500
+          lighter: '#ECFDF5', // emerald-50
         },
         gray: {
-          light: '#F3F4F6',    // gray-100
-          medium: '#9CA3AF',   // gray-400
-          dark: '#374151',     // gray-700
+          light: '#F9FAFB',    // gray-50 - softer background
+          medium: '#6B7280',   // gray-500 - better contrast
+          dark: '#111827',     // gray-900 - stronger text
         },
       },
       fontFamily: {
