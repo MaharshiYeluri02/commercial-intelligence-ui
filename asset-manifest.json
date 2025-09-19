@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/commercial-intelligence-ui/static/css/main.cd611c63.css",
+    "main.js": "/commercial-intelligence-ui/static/js/main.e7174c6c.js",
+    "index.html": "/commercial-intelligence-ui/index.html",
+    "main.cd611c63.css.map": "/commercial-intelligence-ui/static/css/main.cd611c63.css.map",
+    "main.e7174c6c.js.map": "/commercial-intelligence-ui/static/js/main.e7174c6c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cd611c63.css",
+    "static/js/main.e7174c6c.js"
+  ]
+}
