@@ -187,7 +187,7 @@ const ResponseCurves = ({ isROIOptimizationActive }) => {
       iconColor: 'text-blue-600',
       chartData: hcp1ChartData,
       lineColor: '#10B981',
-      characteristics: 'Cardiologist, KOL, high publication rate, active in AZ congresses, high local hospitalization rate.',
+      characteristics: 'Cardiologist, KOL, high publication rate, active in medical congresses, high local hospitalization rate.',
       outcomes: [
         'High publication count drives steeper response.',
         'Congress participation raises plateau.',
@@ -230,25 +230,37 @@ const ResponseCurves = ({ isROIOptimizationActive }) => {
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-12 items-center">
-        <div className="relative space-y-8">
-          {/* Connecting vertical line */}
-          <div className="absolute left-8 top-16 bottom-16 w-0.5 bg-gradient-to-b from-secondary-light via-primary-light to-accent-light z-0"></div>
-          
-          {steps.map((step) => (
-            <div key={step.number} className="relative flex items-start space-x-6 p-6 bg-gray-50 rounded-xl border border-gray-200 z-10">
-              <div className={`flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-full bg-opacity-20 bg-${step.number === 1 ? 'secondary' : step.number === 2 ? 'primary' : 'accent'}-500 text-${step.number === 1 ? 'secondary' : step.number === 2 ? 'primary' : 'accent'}-600 border-4 border-white shadow-lg`}>
-                {step.icon}
+      <div className="grid lg:grid-cols-2 gap-12 items-stretch">
+        {/* Process Steps Card */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 flex flex-col">
+          <h3 className="text-2xl font-bold text-gray-dark mb-8 text-center">Our AI Process</h3>
+          <div className="relative space-y-6 flex-grow">
+            {/* Connecting vertical line */}
+            <div className="absolute left-8 top-16 bottom-16 w-0.5 bg-gradient-to-b from-secondary-light via-primary-light to-accent-light z-0"></div>
+            
+            {steps.map((step) => (
+              <div key={step.number} className="relative flex items-start space-x-6 p-4 bg-gray-50 rounded-xl border border-gray-100 z-10 hover:shadow-md transition-shadow duration-200">
+                <div className={`flex-shrink-0 w-14 h-14 flex items-center justify-center rounded-full ${
+                  step.number === 1 ? 'bg-secondary-lighter text-secondary' : 
+                  step.number === 2 ? 'bg-primary-lighter text-primary' : 
+                  'bg-accent-lighter text-accent'
+                } border-4 border-white shadow-lg`}>
+                  {step.icon}
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-gray-dark">{step.title}</h4>
+                  <p className="mt-1 text-gray-600 text-sm">{step.description}</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-gray-dark">{step.title}</h3>
-                <p className="mt-2 text-gray-600">{step.description}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        <div className="w-full h-96">
+        {/* Chart Card */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 flex flex-col">
+          <h3 className="text-2xl font-bold text-gray-dark mb-6 text-center">Response Curve Simulation</h3>
+          <div className="w-full flex-grow flex items-center">
+            <div className="w-full h-96">
             <ResponsiveContainer>
                 <AreaChart data={transformedData} margin={{ top: 5, right: 20, left: -10, bottom: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
@@ -279,6 +291,8 @@ const ResponseCurves = ({ isROIOptimizationActive }) => {
                     <Line type="monotone" dataKey="Optimize" stroke="#10B981" strokeWidth={3} dot={false} />
                 </AreaChart>
             </ResponsiveContainer>
+            </div>
+          </div>
         </div>
       </div>
       <AnimatedSection>
