@@ -236,7 +236,7 @@ const ResponseCurves = ({ isROIOptimizationActive }) => {
           <h3 className="text-2xl font-bold text-gray-dark mb-8 text-center">Our AI Process</h3>
           <div className="relative space-y-6 flex-grow">
             {/* Connecting vertical line */}
-            <div className="absolute left-8 top-16 bottom-16 w-0.5 bg-gradient-to-b from-secondary-light via-primary-light to-accent-light z-0"></div>
+            <div className="absolute left-8 top-16 bottom-16 w-0.5 bg-gray-300 z-0"></div>
             
             {steps.map((step) => (
               <div key={step.number} className="relative flex items-start space-x-6 p-4 bg-gray-50 rounded-xl border border-gray-100 z-10 hover:shadow-md transition-shadow duration-200">
@@ -506,7 +506,7 @@ const FieldForceSizing = () => {
       {/* Container for the three connected sections */}
       <div className="relative">
         {/* Connecting vertical line for the three field force sections */}
-        <div className="absolute left-6 -top-8 h-full w-1 bg-gradient-to-b from-primary-light via-accent-light to-secondary-light z-0 hidden lg:block"></div>
+        <div className="absolute left-6 -top-8 h-full w-1 bg-gray-300 z-0 hidden lg:block"></div>
         
         {/* Connection dots for each section */}
         <div className="absolute left-5 top-0 w-3 h-3 bg-primary rounded-full border-2 border-white shadow-lg z-10 hidden lg:block"></div>
@@ -1024,7 +1024,7 @@ const App = () => {
       <Hero />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative">
         {/* Connecting vertical line for the first three sections */}
-        <div className="absolute left-20 top-32 h-[60rem] w-1 bg-gradient-to-b from-primary-light via-accent-light to-secondary-light z-0 hidden lg:block"></div>
+        <div className="absolute left-20 top-32 h-[60rem] w-1 bg-gray-300 z-0 hidden lg:block"></div>
         
         {/* Connection dots for each section */}
         <div className="absolute left-[4.75rem] top-40 w-3 h-3 bg-primary rounded-full border-2 border-white shadow-lg z-10 hidden lg:block"></div>
