@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/commercial-intelligence-ui/static/css/main.cd611c63.css",
-    "main.js": "/commercial-intelligence-ui/static/js/main.e7174c6c.js",
+    "main.css": "/commercial-intelligence-ui/static/css/main.5109e63f.css",
+    "main.js": "/commercial-intelligence-ui/static/js/main.db1625bd.js",
     "index.html": "/commercial-intelligence-ui/index.html",
-    "main.cd611c63.css.map": "/commercial-intelligence-ui/static/css/main.cd611c63.css.map",
-    "main.e7174c6c.js.map": "/commercial-intelligence-ui/static/js/main.e7174c6c.js.map"
+    "main.5109e63f.css.map": "/commercial-intelligence-ui/static/css/main.5109e63f.css.map",
+    "main.db1625bd.js.map": "/commercial-intelligence-ui/static/js/main.db1625bd.js.map"
   },
   "entrypoints": [
-    "static/css/main.cd611c63.css",
-    "static/js/main.e7174c6c.js"
+    "static/css/main.5109e63f.css",
+    "static/js/main.db1625bd.js"
   ]
 }
