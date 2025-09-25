@@ -32,6 +32,2905 @@ const AnimatedSection = ({ children }) => {
   );
 };
 
+const AnimatedCounter = ({ end, duration = 2, suffix = "" }) => {
+  const [count, setCount] = React.useState(0);
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  React.useEffect(() => {
+    if (inView) {
+      let startTime;
+      const animate = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+        
+        if (typeof end === 'string' && end.includes('x')) {
+          const numValue = parseFloat(end.replace('x', ''));
+          setCount(Math.floor(progress * numValue));
+        } else {
+          setCount(Math.floor(progress * parseFloat(end)));
+        }
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+      requestAnimationFrame(animate);
+    }
+  }, [inView, end, duration]);
+
+  return (
+    <span ref={ref}>
+      {typeof end === 'string' && end.includes('x') ? `${count}x` : count}{suffix}
+    </span>
+  );
+};
+
+const PharmaBYOB = () => {
+  const [selectedRole, setSelectedRole] = React.useState('field');
+  const [isTyping, setIsTyping] = React.useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
+  const [showAnswer, setShowAnswer] = React.useState(false);
+  const [isAnimating, setIsAnimating] = React.useState(true);
+
+  const questions = {
+    field: [
+      "Based on our latest strategy, who are my top 10 highest-potential HCPs to target this week?",
+      "Show me doctors in my territory with a high number of eligible patients but low prescribing volume for my drug.",
+      "Why did Dr. Evans' prescription volume suddenly drop last month?"
+    ],
+    hq: [
+      "What is our national market share trend versus our top three competitors over the last year?",
+      "Show me our quarterly revenue performance by region for the past 2 years.",
+      "What are the top 5 territories by prescription volume and their growth rates?"
+    ]
+  };
+
+  const answers = {
+    field: [
+      {
+        question: "Based on our latest strategy, who are my top 10 highest-potential HCPs to target this week?",
+        type: "table",
+        data: [
+          { rank: 1, name: "Dr. Sarah Chen", specialty: "Cardiologist", score: 92, eligiblePts: 45, penetration: "12%", action: "Visit This Week", priority: "High" },
+          { rank: 2, name: "Dr. Michael Rodriguez", specialty: "Endocrinologist", score: 87, eligiblePts: 32, penetration: "8%", action: "Retention Visit", priority: "High" },
+          { rank: 3, name: "Dr. Jennifer Kim", specialty: "Nephrologist", score: 84, eligiblePts: 67, penetration: "15%", action: "Follow-up", priority: "Medium" },
+          { rank: 4, name: "Dr. Robert Johnson", specialty: "Cardiologist", score: 79, eligiblePts: 28, penetration: "22%", action: "Educational Visit", priority: "Medium" },
+          { rank: 5, name: "Dr. Lisa Thompson", specialty: "Endocrinologist", score: 76, eligiblePts: 19, penetration: "5%", action: "Initial Contact", priority: "Medium" }
+        ]
+      },
+      {
+        question: "Show me doctors in my territory with a high number of eligible patients but low prescribing volume for my drug.",
+        type: "chart",
+        data: {
+          title: "High Opportunity HCPs - Eligible Patients vs. Current Prescriptions",
+          hcps: [
+            { name: "Dr. Martinez", eligible: 78, current: 3, opportunity: 75 },
+            { name: "Dr. Wilson", eligible: 65, current: 8, opportunity: 57 },
+            { name: "Dr. Brown", eligible: 52, current: 5, opportunity: 47 },
+            { name: "Dr. Davis", eligible: 48, current: 12, opportunity: 36 },
+            { name: "Dr. Taylor", eligible: 41, current: 7, opportunity: 34 }
+          ]
+        }
+      },
+      {
+        question: "Why did Dr. Evans' prescription volume suddenly drop last month?",
+        type: "analysis",
+        data: {
+          hcp: "Dr. Evans",
+          specialty: "Cardiologist",
+          previousVolume: 24,
+          currentVolume: 8,
+          change: -67,
+          factors: [
+            { factor: "Competitor Launch", impact: "High", description: "New competitor drug launched with aggressive pricing" },
+            { factor: "Patient Demographics", impact: "Medium", description: "Shift in patient population to younger demographics" },
+            { factor: "Formulary Changes", impact: "Low", description: "Minor formulary restrictions introduced" }
+          ],
+          timeline: [
+            { month: "Jan", volume: 22 },
+            { month: "Feb", volume: 24 },
+            { month: "Mar", volume: 26 },
+            { month: "Apr", volume: 8 }
+          ]
+        }
+      }
+    ],
+    hq: [
+      {
+        question: "What is our national market share trend versus our top three competitors over the last year?",
+        type: "marketshare",
+        data: {
+          title: "Market Share Trends - Last 12 Months",
+          brands: [
+            { name: "Your Brand", current: 23.4, change: +1.2, color: "#4F46E5", data: [22.1, 22.3, 22.8, 23.4] },
+            { name: "Competitor A", current: 31.2, change: -0.8, color: "#EF4444", data: [32.0, 31.8, 31.5, 31.2] },
+            { name: "Competitor B", current: 18.7, change: +0.3, color: "#F59E0B", data: [18.4, 18.5, 18.6, 18.7] },
+            { name: "Competitor C", current: 15.1, change: -0.4, color: "#10B981", data: [15.5, 15.3, 15.2, 15.1] }
+          ],
+          quarters: ["Q1 2024", "Q2 2024", "Q3 2024", "Q4 2024"]
+        }
+      },
+      {
+        question: "Show me our quarterly revenue performance by region for the past 2 years.",
+        type: "revenue",
+        data: {
+          title: "Quarterly Revenue by Region (2023-2024)",
+          regions: [
+            { name: "Northeast", q1_23: 45.2, q2_23: 48.1, q3_23: 52.3, q4_23: 49.8, q1_24: 51.2, q2_24: 54.7, q3_24: 58.1, q4_24: 56.3, color: "#4F46E5" },
+            { name: "Southeast", q1_23: 38.7, q2_23: 41.2, q3_23: 44.8, q4_23: 42.1, q1_24: 43.9, q2_24: 47.2, q3_24: 50.6, q4_24: 48.9, color: "#10B981" },
+            { name: "West", q1_23: 52.1, q2_23: 55.8, q3_23: 59.2, q4_23: 57.4, q1_24: 58.7, q2_24: 62.3, q3_24: 65.9, q4_24: 63.2, color: "#F59E0B" },
+            { name: "Central", q1_23: 41.3, q2_23: 43.9, q3_23: 47.1, q4_23: 45.2, q1_24: 46.8, q2_24: 49.5, q3_24: 52.7, q4_24: 51.1, color: "#EF4444" }
+          ],
+          quarters: ["Q1'23", "Q2'23", "Q3'23", "Q4'23", "Q1'24", "Q2'24", "Q3'24", "Q4'24"]
+        }
+      },
+      {
+        question: "What are the top 5 territories by prescription volume and their growth rates?",
+        type: "territories",
+        data: {
+          title: "Top 5 Territories by Prescription Volume",
+          territories: [
+            { name: "California North", volume: 12847, growth: 18.3, rep: "Sarah Johnson", hcps: 156, color: "#4F46E5" },
+            { name: "Texas Metro", volume: 11293, growth: 15.7, rep: "Michael Chen", hcps: 142, color: "#10B981" },
+            { name: "Florida East", volume: 10658, growth: 22.1, rep: "Lisa Rodriguez", hcps: 134, color: "#F59E0B" },
+            { name: "New York City", volume: 9847, growth: 12.4, rep: "David Kim", hcps: 128, color: "#EF4444" },
+            { name: "Illinois Central", volume: 8932, growth: 19.8, rep: "Jennifer Lee", hcps: 119, color: "#8B5CF6" }
+          ]
+        }
+      }
+    ]
+  };
+
+  // Auto-cycle through questions
+  React.useEffect(() => {
+    if (!isAnimating) return;
+    
+    const questionCycle = setInterval(() => {
+      setShowAnswer(false);
+      setIsTyping(true);
+      
+      setTimeout(() => {
+        setCurrentQuestionIndex(prev => (prev + 1) % questions[selectedRole].length);
+        setIsTyping(false);
+        setShowAnswer(true);
+      }, 2000);
+    }, 8000); // Change question every 8 seconds
+
+    return () => clearInterval(questionCycle);
+  }, [selectedRole, isAnimating, questions]);
+
+  // Initial setup
+  React.useEffect(() => {
+    setCurrentQuestionIndex(0);
+    setShowAnswer(false);
+    setIsTyping(true);
+    
+    setTimeout(() => {
+      setIsTyping(false);
+      setShowAnswer(true);
+    }, 2000);
+  }, [selectedRole]);
+
+  const currentQuestion = questions[selectedRole] && questions[selectedRole][currentQuestionIndex];
+  const currentAnswer = answers[selectedRole] && answers[selectedRole][currentQuestionIndex];
+
+  return (
+    <div className="bg-white min-h-screen">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
+          <AnimatedSection>
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <motion.h1 
+                  className="text-5xl font-extrabold text-gray-dark leading-tight mb-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                >
+                  Go from Complex Business Question to <span className="text-indigo-600">Strategic Answer</span> in Seconds
+                </motion.h1>
+                <motion.p 
+                  className="text-xl text-gray-medium leading-relaxed mb-8"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                >
+                  Introducing <span className="font-bold text-indigo-600">Pharma BYOB</span>, the conversational analytics platform for pharma commercial teams. Stop waiting for static reports and BI queues. Start having a direct, intelligent conversation with your data and get the answers you need, when you need them.
+                </motion.p>
+                <motion.div
+                  className="flex flex-col sm:flex-row gap-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  <button className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    Request a Live Demo
+                  </button>
+                  <button className="text-indigo-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-indigo-200 hover:bg-indigo-50 transition-all duration-300">
+                    How It Works →
+                  </button>
+                </motion.div>
+              </div>
+
+              {/* Animated Chat Interface */}
+              <motion.div
+                className="bg-white rounded-2xl shadow-2xl p-6 border"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
+                <div className="bg-indigo-600 text-white p-4 rounded-t-xl -m-6 mb-6">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <h3 className="font-bold">Pharma BYOB Assistant</h3>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="bg-gray-100 p-3 rounded-lg">
+                    <p className="text-sm text-gray-600">You:</p>
+                    <p className="font-medium">Show me my top performing territories this quarter</p>
+                  </div>
+                  
+                  <div className="bg-indigo-50 p-3 rounded-lg">
+                    <p className="text-sm text-indigo-600">Pharma BYOB:</p>
+                    <div className="mt-2">
+                      {isTyping ? (
+                        <div className="flex items-center space-x-2">
+                          <div className="flex space-x-1">
+                            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          </div>
+                          <span className="text-sm text-gray-500">Analyzing your data...</span>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="font-medium mb-3">Here are your top 3 performing territories:</p>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center p-2 bg-white rounded border">
+                              <span className="font-medium">Northeast Metro</span>
+                              <span className="text-green-600 font-bold">+23.4%</span>
+                            </div>
+                            <div className="flex justify-between items-center p-2 bg-white rounded border">
+                              <span className="font-medium">Southwest Urban</span>
+                              <span className="text-green-600 font-bold">+18.7%</span>
+                            </div>
+                            <div className="flex justify-between items-center p-2 bg-white rounded border">
+                              <span className="font-medium">Central Rural</span>
+                              <span className="text-green-600 font-bold">+15.2%</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Problem Section */}
+      <div className="bg-red-50 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-8">
+                The Speed of Business is Faster Than the <span className="text-red-600">Speed of Insight</span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                Your organization is rich with data, but you're held back by a slow, rigid system of static dashboards and report requests. Urgent business questions turn into a multi-day waiting game, forcing you to make critical decisions with incomplete or outdated information.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: (
+                    <svg className="h-12 w-12 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  ),
+                  title: "The Data Bottleneck",
+                  description: "You can't freely interrogate your data. Every new question requires a ticket to the analytics team, creating long queues and delaying critical insights."
+                },
+                {
+                  icon: (
+                    <svg className="h-12 w-12 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                    </svg>
+                  ),
+                  title: "The Rigidity of Dashboards",
+                  description: "Pre-built reports offer a 'look-but-don't-touch' view. They stifle curiosity and prevent the follow-up questions needed for deep, exploratory analysis."
+                },
+                {
+                  icon: (
+                    <svg className="h-12 w-12 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                  ),
+                  title: "The Risk of Misinterpretation",
+                  description: "A chart without context is just a number. Without understanding the complex business rules behind the data, your team risks drawing incorrect conclusions."
+                }
+              ].map((pain, index) => (
+                <motion.div
+                  key={index}
+                  className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
+                  whileHover={{ y: -5 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <div className="bg-red-100 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                    {pain.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-dark mb-4">{pain.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{pain.description}</p>
+                </motion.div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Solution Section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-8">
+                We Built <span className="text-indigo-600">Pharma BYOB</span> to Be Your Intelligent Analytics Partner
+              </h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12">
+                We've replaced the friction of BI requests and the inflexibility of dashboards with a simple, natural language interface. Pharma BYOB empowers every business user—from field reps to brand leadership—to have a dynamic, direct conversation with your data in plain English.
+              </p>
+              
+              {/* Core Innovation Callout */}
+              <div className="bg-gradient-to-r from-indigo-100 to-purple-100 rounded-2xl p-8 border-2 border-indigo-200 max-w-4xl mx-auto">
+                <div className="flex items-start space-x-4">
+                  <div className="bg-indigo-600 p-3 rounded-full">
+                    <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-2xl font-bold text-indigo-800 mb-4">The Core Innovation</h3>
+                    <p className="text-lg text-indigo-700 leading-relaxed">
+                      The true power lies in our <strong>Context-Aware Intelligence</strong>. Our proprietary Semantic Layer is a "knowledge brain" that understands your unique business rules, clinical guidelines, and KPI definitions. When you ask a question, it doesn't just see keywords; it understands your business intent, ensuring every answer is not just fast, but accurate and reliable.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Role-Based Section */}
+      <div className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-4">
+                An Answer Engine Built for the <span className="text-indigo-600">Way You Work</span>
+              </h2>
+            </div>
+
+            {/* Role Tabs */}
+            <div className="flex justify-center mb-12">
+              <div className="bg-white p-2 rounded-xl shadow-lg flex gap-2">
+                <button
+                  onClick={() => setSelectedRole('field')}
+                  className={`px-8 py-4 rounded-lg font-semibold transition-all duration-300 ${
+                    selectedRole === 'field'
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'
+                  }`}
+                >
+                  Field Force & Sales Leadership
+                </button>
+                <button
+                  onClick={() => setSelectedRole('hq')}
+                  className={`px-8 py-4 rounded-lg font-semibold transition-all duration-300 ${
+                    selectedRole === 'hq'
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'
+                  }`}
+                >
+                  HQ Brand & Marketing Leads
+                </button>
+              </div>
+            </div>
+
+            {/* Role Content */}
+            <div className="grid lg:grid-cols-2 gap-12">
+              {/* Left: Role Description */}
+              <motion.div
+                key={selectedRole}
+                className="bg-white rounded-2xl p-8 shadow-lg"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {selectedRole === 'field' ? (
+                  <div>
+                    <div className="bg-red-100 p-4 rounded-lg mb-6">
+                      <h3 className="text-xl font-bold text-red-800 mb-2">Core Anxiety Addressed:</h3>
+                      <p className="text-red-700 italic">"Am I wasting my time calling on the wrong physicians?"</p>
+                    </div>
+                    
+                    <h4 className="text-lg font-bold text-gray-dark mb-4">Sample Questions:</h4>
+                    <div className="space-y-3 mb-6">
+                      {questions.field.map((q, i) => (
+                        <div
+                          key={i}
+                          className={`p-3 rounded-lg border transition-all duration-300 ${
+                            i === currentQuestionIndex 
+                              ? 'bg-indigo-100 border-indigo-300 shadow-md' 
+                              : 'bg-gray-50 border-gray-200'
+                          }`}
+                        >
+                          <p className={`text-sm ${i === currentQuestionIndex ? 'text-indigo-700 font-medium' : 'text-gray-600'}`}>
+                            "{q}"
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <h4 className="text-lg font-bold text-gray-dark mb-4">Get Answers That Are:</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                        <div>
+                          <p className="font-semibold text-green-700">Prescriptive & Prioritized:</p>
+                          <p className="text-gray-600">Ranked tables with actionable recommendations</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                        <div>
+                          <p className="font-semibold text-blue-700">Visual & Explainable:</p>
+                          <p className="text-gray-600">Charts and analysis showing the "why" behind insights</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                        <div>
+                          <p className="font-semibold text-purple-700">Instant & On-the-Go:</p>
+                          <p className="text-gray-600">Rich dashboards delivered in seconds</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="bg-red-100 p-4 rounded-lg mb-6">
+                      <h3 className="text-xl font-bold text-red-800 mb-2">Core Anxiety Addressed:</h3>
+                      <p className="text-red-700 italic">"Can I answer the 'why' behind my brand's performance in a leadership meeting?"</p>
+                    </div>
+                    
+                    <h4 className="text-lg font-bold text-gray-dark mb-4">Sample Questions:</h4>
+                    <div className="space-y-3 mb-6">
+                      {questions.hq.map((q, i) => (
+                        <div
+                          key={i}
+                          className={`p-3 rounded-lg border transition-all duration-300 ${
+                            i === currentQuestionIndex 
+                              ? 'bg-indigo-100 border-indigo-300 shadow-md' 
+                              : 'bg-gray-50 border-gray-200'
+                          }`}
+                        >
+                          <p className={`text-sm ${i === currentQuestionIndex ? 'text-indigo-700 font-medium' : 'text-gray-600'}`}>
+                            "{q}"
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <h4 className="text-lg font-bold text-gray-dark mb-4">Get Answers That Are:</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                        <div>
+                          <p className="font-semibold text-green-700">Synthesized & Causal:</p>
+                          <p className="text-gray-600">Executive dashboards with root-cause analysis</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                        <div>
+                          <p className="font-semibold text-blue-700">Report-Ready:</p>
+                          <p className="text-gray-600">Professional charts and insights for presentations</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                        <div>
+                          <p className="font-semibold text-purple-700">Holistic:</p>
+                          <p className="text-gray-600">Integrated views across all data sources</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Right: Automated Demo */}
+              <motion.div
+                key={`demo-${selectedRole}-${currentQuestionIndex}`}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden border"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="bg-indigo-600 text-white p-4 flex items-center justify-between">
+                  <h4 className="font-bold">Live Demo</h4>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-sm">Auto-cycling</span>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="space-y-4">
+                    <div className="bg-gray-100 p-4 rounded-lg">
+                      <p className="text-sm text-gray-600 mb-2">Your Question:</p>
+                      <p className="font-medium">"{currentQuestion}"</p>
+                    </div>
+                    
+                    {isTyping ? (
+                      <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                        <p className="text-sm text-indigo-600 mb-2">Pharma BYOB is analyzing...</p>
+                        <div className="flex items-center space-x-2">
+                          <div className="flex space-x-1">
+                            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          </div>
+                          <span className="text-sm text-gray-500">Processing your request...</span>
+                        </div>
+                      </div>
+                    ) : (showAnswer && currentAnswer) ? (
+                      <motion.div
+                        className="bg-indigo-50 rounded-lg border border-indigo-200 overflow-hidden"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <div className="p-4 border-b border-indigo-200">
+                          <p className="text-sm text-indigo-600 font-medium">Pharma BYOB Answer:</p>
+                        </div>
+                        
+                        {/* Render different answer types */}
+                        {currentAnswer && currentAnswer.type === 'table' && (
+                          <div className="p-4">
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-sm">
+                                <thead className="bg-indigo-100">
+                                  <tr>
+                                    <th className="text-left py-2 px-3 font-semibold">#</th>
+                                    <th className="text-left py-2 px-3 font-semibold">HCP</th>
+                                    <th className="text-center py-2 px-3 font-semibold">Score</th>
+                                    <th className="text-center py-2 px-3 font-semibold">Eligible Pts</th>
+                                    <th className="text-center py-2 px-3 font-semibold">Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {currentAnswer.data && currentAnswer.data.map((row, i) => (
+                                    <tr key={i} className="border-b border-indigo-100 hover:bg-indigo-25">
+                                      <td className="py-2 px-3 font-medium">{row.rank}</td>
+                                      <td className="py-2 px-3">
+                                        <div>
+                                          <p className="font-medium">{row.name}</p>
+                                          <p className="text-xs text-gray-500">{row.specialty}</p>
+                                        </div>
+                                      </td>
+                                      <td className="py-2 px-3 text-center">
+                                        <span className={`px-2 py-1 rounded text-xs font-bold ${
+                                          row.score >= 90 ? 'bg-green-100 text-green-800' :
+                                          row.score >= 80 ? 'bg-yellow-100 text-yellow-800' :
+                                          'bg-gray-100 text-gray-800'
+                                        }`}>
+                                          {row.score}
+                                        </span>
+                                      </td>
+                                      <td className="py-2 px-3 text-center font-medium">{row.eligiblePts}</td>
+                                      <td className="py-2 px-3 text-center">
+                                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                                          row.priority === 'High' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
+                                        }`}>
+                                          {row.action}
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
+
+                        {currentAnswer && currentAnswer.type === 'chart' && (
+                          <div className="p-4">
+                            <h5 className="font-semibold text-gray-dark mb-4">{currentAnswer.data && currentAnswer.data.title}</h5>
+                            <div className="space-y-3">
+                              {currentAnswer.data && currentAnswer.data.hcps && currentAnswer.data.hcps.map((hcp, i) => (
+                                <div key={i} className="bg-white p-3 rounded border">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="font-medium">{hcp.name}</span>
+                                    <span className="text-sm text-gray-600">Opportunity: {hcp.opportunity} pts</span>
+                                  </div>
+                                  <div className="flex items-center space-x-4">
+                                    <div className="flex-1">
+                                      <div className="flex justify-between text-xs text-gray-500 mb-1">
+                                        <span>Eligible: {hcp.eligible}</span>
+                                        <span>Current: {hcp.current}</span>
+                                      </div>
+                                      <div className="w-full bg-gray-200 rounded-full h-2">
+                                        <div 
+                                          className="bg-indigo-600 h-2 rounded-full"
+                                          style={{ width: `${(hcp.current / hcp.eligible) * 100}%` }}
+                                        ></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {currentAnswer && currentAnswer.type === 'analysis' && (
+                          <div className="p-4">
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                              <div className="bg-white p-3 rounded border">
+                                <p className="text-xs text-gray-500">Previous Volume</p>
+                                <p className="text-2xl font-bold text-gray-700">{currentAnswer.data && currentAnswer.data.previousVolume}</p>
+                              </div>
+                              <div className="bg-white p-3 rounded border">
+                                <p className="text-xs text-gray-500">Current Volume</p>
+                                <p className="text-2xl font-bold text-red-600">{currentAnswer.data && currentAnswer.data.currentVolume}</p>
+                              </div>
+                            </div>
+                            
+                            <h6 className="font-semibold text-gray-dark mb-3">Impact Factors:</h6>
+                            <div className="space-y-2">
+                              {currentAnswer.data && currentAnswer.data.factors && currentAnswer.data.factors.map((factor, i) => (
+                                <div key={i} className="bg-white p-3 rounded border">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="font-medium">{factor.factor}</span>
+                                    <span className={`px-2 py-1 rounded text-xs font-bold ${
+                                      factor.impact === 'High' ? 'bg-red-100 text-red-800' :
+                                      factor.impact === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                                      'bg-green-100 text-green-800'
+                                    }`}>
+                                      {factor.impact}
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-gray-600">{factor.description}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {currentAnswer && currentAnswer.type === 'marketshare' && (
+                          <div className="p-4">
+                            <h5 className="font-semibold text-gray-dark mb-4">{currentAnswer.data && currentAnswer.data.title}</h5>
+                            
+                            {/* Market Share Chart */}
+                            <div className="bg-white rounded-lg border p-4 mb-4">
+                              <div className="h-48 relative">
+                                <svg viewBox="0 0 400 200" className="w-full h-full">
+                                  {/* Grid lines */}
+                                  {[0, 10, 20, 30, 40].map(y => (
+                                    <line key={y} x1="40" y1={180 - y * 3.5} x2="380" y2={180 - y * 3.5} stroke="#E5E7EB" strokeWidth="1"/>
+                                  ))}
+                                  
+                                  {/* Y-axis labels */}
+                                  {[0, 10, 20, 30, 40].map(y => (
+                                    <text key={y} x="35" y={185 - y * 3.5} textAnchor="end" className="text-xs fill-gray-500">{y}%</text>
+                                  ))}
+                                  
+                                  {/* X-axis labels */}
+                                  {currentAnswer.data && currentAnswer.data.quarters && currentAnswer.data.quarters.map((quarter, i) => (
+                                    <text key={i} x={60 + i * 80} y="195" textAnchor="middle" className="text-xs fill-gray-500">{quarter}</text>
+                                  ))}
+                                  
+                                  {/* Lines for each brand */}
+                                  {currentAnswer.data && currentAnswer.data.brands && currentAnswer.data.brands.map((brand, brandIndex) => (
+                                    <g key={brandIndex}>
+                                      <polyline
+                                        fill="none"
+                                        stroke={brand.color}
+                                        strokeWidth="3"
+                                        points={brand.data.map((value, i) => `${60 + i * 80},${180 - value * 3.5}`).join(' ')}
+                                      />
+                                      {/* Data points */}
+                                      {brand.data.map((value, i) => (
+                                        <circle
+                                          key={i}
+                                          cx={60 + i * 80}
+                                          cy={180 - value * 3.5}
+                                          r="4"
+                                          fill={brand.color}
+                                        />
+                                      ))}
+                                    </g>
+                                  ))}
+                                </svg>
+                              </div>
+                            </div>
+
+                            {/* Brand Summary */}
+                            <div className="grid grid-cols-2 gap-3">
+                              {currentAnswer.data && currentAnswer.data.brands && currentAnswer.data.brands.map((brand, i) => (
+                                <div key={i} className="bg-white p-3 rounded border">
+                                  <div className="flex items-center space-x-2 mb-2">
+                                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: brand.color }}></div>
+                                    <span className="font-medium text-sm">{brand.name}</span>
+                                  </div>
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-lg font-bold">{brand.current}%</span>
+                                    <span className={`text-sm font-medium ${
+                                      brand.change > 0 ? 'text-green-600' : 'text-red-600'
+                                    }`}>
+                                      {brand.change > 0 ? '+' : ''}{brand.change}%
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {currentAnswer && currentAnswer.type === 'revenue' && (
+                          <div className="p-4">
+                            <h5 className="font-semibold text-gray-dark mb-4">{currentAnswer.data && currentAnswer.data.title}</h5>
+                            
+                            {/* Revenue Chart */}
+                            <div className="bg-white rounded-lg border p-4 mb-4">
+                              <div className="h-56 relative">
+                                <svg viewBox="0 0 500 240" className="w-full h-full">
+                                  {/* Grid lines */}
+                                  {[0, 20, 40, 60, 80].map(y => (
+                                    <line key={y} x1="50" y1={200 - y * 2} x2="480" y2={200 - y * 2} stroke="#E5E7EB" strokeWidth="1"/>
+                                  ))}
+                                  
+                                  {/* Y-axis labels */}
+                                  {[0, 20, 40, 60, 80].map(y => (
+                                    <text key={y} x="45" y={205 - y * 2} textAnchor="end" className="text-xs fill-gray-500">${y}M</text>
+                                  ))}
+                                  
+                                  {/* X-axis labels */}
+                                  {currentAnswer.data && currentAnswer.data.quarters && currentAnswer.data.quarters.map((quarter, i) => (
+                                    <text key={i} x={70 + i * 50} y="220" textAnchor="middle" className="text-xs fill-gray-500">{quarter}</text>
+                                  ))}
+                                  
+                                  {/* Lines for each region */}
+                                  {currentAnswer.data && currentAnswer.data.regions && currentAnswer.data.regions.map((region, regionIndex) => (
+                                    <g key={regionIndex}>
+                                      <polyline
+                                        fill="none"
+                                        stroke={region.color}
+                                        strokeWidth="2"
+                                        points={[region.q1_23, region.q2_23, region.q3_23, region.q4_23, region.q1_24, region.q2_24, region.q3_24, region.q4_24]
+                                          .map((value, i) => `${70 + i * 50},${200 - value * 2}`).join(' ')}
+                                      />
+                                      {/* Data points */}
+                                      {[region.q1_23, region.q2_23, region.q3_23, region.q4_23, region.q1_24, region.q2_24, region.q3_24, region.q4_24].map((value, i) => (
+                                        <circle
+                                          key={i}
+                                          cx={70 + i * 50}
+                                          cy={200 - value * 2}
+                                          r="3"
+                                          fill={region.color}
+                                        />
+                                      ))}
+                                    </g>
+                                  ))}
+                                </svg>
+                              </div>
+                            </div>
+
+                            {/* Region Legend */}
+                            <div className="grid grid-cols-2 gap-3">
+                              {currentAnswer.data && currentAnswer.data.regions && currentAnswer.data.regions.map((region, i) => (
+                                <div key={i} className="bg-white p-3 rounded border">
+                                  <div className="flex items-center space-x-2 mb-1">
+                                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: region.color }}></div>
+                                    <span className="font-medium text-sm">{region.name}</span>
+                                  </div>
+                                  <div className="text-xs text-gray-600">
+                                    Latest: ${region.q4_24}M
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {currentAnswer && currentAnswer.type === 'territories' && (
+                          <div className="p-4">
+                            <h5 className="font-semibold text-gray-dark mb-4">{currentAnswer.data && currentAnswer.data.title}</h5>
+                            
+                            <div className="space-y-3">
+                              {currentAnswer.data && currentAnswer.data.territories && currentAnswer.data.territories.map((territory, i) => (
+                                <div key={i} className="bg-white p-4 rounded border">
+                                  <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center space-x-3">
+                                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: territory.color }}>
+                                        {i + 1}
+                                      </div>
+                                      <div>
+                                        <h6 className="font-semibold text-gray-dark">{territory.name}</h6>
+                                        <p className="text-xs text-gray-500">Rep: {territory.rep}</p>
+                                      </div>
+                                    </div>
+                                    <div className="text-right">
+                                      <p className="text-lg font-bold text-gray-dark">{territory.volume.toLocaleString()}</p>
+                                      <p className="text-xs text-gray-500">prescriptions</p>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="grid grid-cols-3 gap-4 text-center">
+                                    <div>
+                                      <p className="text-sm text-gray-500">Growth Rate</p>
+                                      <p className={`font-bold ${territory.growth > 15 ? 'text-green-600' : 'text-blue-600'}`}>
+                                        +{territory.growth}%
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p className="text-sm text-gray-500">HCPs</p>
+                                      <p className="font-bold text-gray-700">{territory.hcps}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-sm text-gray-500">Avg per HCP</p>
+                                      <p className="font-bold text-gray-700">{Math.round(territory.volume / territory.hcps)}</p>
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Growth bar */}
+                                  <div className="mt-3">
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                      <div 
+                                        className="h-2 rounded-full"
+                                        style={{ 
+                                          width: `${Math.min(territory.growth * 4, 100)}%`,
+                                          backgroundColor: territory.color 
+                                        }}
+                                      ></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </motion.div>
+                    ) : null}
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Technology Section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-8">
+                Powered by a <span className="text-indigo-600">Scalable, Future-Proof</span> Architecture
+              </h2>
+            </div>
+
+            {/* Technology Flow Animation */}
+            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-8 mb-12">
+              <div className="flex items-center justify-between">
+                {[
+                  { label: "Question", icon: "💬", color: "bg-blue-500" },
+                  { label: "Context Layer", icon: "🧠", color: "bg-indigo-500" },
+                  { label: "Orchestration", icon: "⚙️", color: "bg-purple-500" },
+                  { label: "Answer", icon: "✨", color: "bg-green-500" }
+                ].map((step, i) => (
+                  <div key={i} className="flex items-center">
+                    <div className="text-center">
+                      <div className={`w-16 h-16 ${step.color} rounded-full flex items-center justify-center text-white text-2xl mb-2 mx-auto`}>
+                        {step.icon}
+                      </div>
+                      <p className="font-semibold text-gray-dark">{step.label}</p>
+                    </div>
+                    {i < 3 && (
+                      <div className="flex-1 mx-4">
+                        <div className="h-1 bg-gradient-to-r from-gray-300 to-gray-400 rounded-full relative overflow-hidden">
+                          <motion.div
+                            className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
+                            initial={{ width: "0%" }}
+                            animate={{ width: "100%" }}
+                            transition={{ duration: 2, delay: i * 0.5, repeat: Infinity, repeatDelay: 2 }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Technology Components */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[
+                {
+                  title: "Decoupled Context Layer",
+                  description: "Our 'knowledge brain' that isolates and codifies your business logic, ensuring accuracy and making the platform incredibly efficient to scale to new brands or therapeutic areas.",
+                  icon: (
+                    <svg className="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                  )
+                },
+                {
+                  title: "Modular Orchestration Engine",
+                  description: "An intelligent agent that breaks down your request and deploys the right tool for the job—from SQL retrieval to Python analysis—allowing it to answer a virtually infinite variety of questions.",
+                  icon: (
+                    <svg className="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  )
+                },
+                {
+                  title: "Interactive Visualization Generator",
+                  description: "The 'last mile' of analytics. It automatically renders data as interactive charts and provides a natural language summary, bridging the gap between raw data and human understanding.",
+                  icon: (
+                    <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  )
+                },
+                {
+                  title: "Model-Agnostic Design",
+                  description: "Future-proofs your investment by allowing us to integrate the newest, most powerful, and cost-efficient large language models as they become available.",
+                  icon: (
+                    <svg className="h-8 w-8 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  )
+                }
+              ].map((component, index) => (
+                <motion.div
+                  key={index}
+                  className="bg-white rounded-2xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
+                  whileHover={{ y: -5 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <div className="bg-gray-50 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    {component.icon}
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-dark mb-3">{component.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{component.description}</p>
+                </motion.div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Final CTA Section */}
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center text-white max-w-4xl mx-auto">
+              <h2 className="text-4xl font-extrabold mb-8">
+                Stop Waiting for Data. <span className="text-yellow-300">Start Making Decisions.</span>
+              </h2>
+              <p className="text-xl mb-12 opacity-90 leading-relaxed">
+                Empower your teams with the instant, reliable, and contextual insights they need to outmaneuver the competition. Discover how a direct conversation with your data can transform your commercial strategy.
+              </p>
+              <motion.button
+                className="bg-white text-indigo-600 px-12 py-4 rounded-xl font-bold text-xl hover:shadow-2xl transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Schedule a Demo of Pharma BYOB
+              </motion.button>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const HCPTargeting = () => {
+  const [selectedPillar, setSelectedPillar] = React.useState(0);
+  const [selectedHCP, setSelectedHCP] = React.useState(null);
+
+  const therapeuticAreas = [
+    {
+      area: "Respiratory & Immunology",
+      focus: "Asthma, COPD, Systemic Lupus Erythematosus (SLE)",
+      brands: "Tezspire, Fasenra, Breztri, Saphnelo"
+    },
+    {
+      area: "Renal & Metabolic", 
+      focus: "Chronic Kidney Disease (CKD), Type 2 Diabetes, Hyperkalemia",
+      brands: "Farxiga, Lokelma"
+    },
+    {
+      area: "Cardiovascular",
+      focus: "Heart Failure",
+      brands: "Farxiga"
+    },
+    {
+      area: "Rare Diseases",
+      focus: "ATTR Amyloidosis", 
+      brands: "Eplontersen"
+    }
+  ];
+
+  const pillars = [
+    {
+      id: 1,
+      title: "Foundational Universe Design",
+      description: "Building a comprehensive and dynamic universe of priority HCPs using predictive models for likelihood to initiate and risk of discontinuation.",
+      icon: (
+        <svg className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+      ),
+      mockupData: {
+        title: "HCP Universe Dashboard",
+        hcps: [
+          { name: "Dr. Sarah Chen", specialty: "Cardiologist", volume: "High", startProb: 0.85, stopRisk: 0.12, eligiblePts: 45, priority: "A1" },
+          { name: "Dr. Michael Rodriguez", specialty: "Endocrinologist", volume: "Medium", startProb: 0.72, stopRisk: 0.28, eligiblePts: 32, priority: "A2" },
+          { name: "Dr. Jennifer Kim", specialty: "Nephrologist", volume: "High", startProb: 0.91, stopRisk: 0.08, eligiblePts: 67, priority: "A1" },
+          { name: "Dr. Robert Johnson", specialty: "Cardiologist", volume: "Medium", startProb: 0.68, stopRisk: 0.35, eligiblePts: 28, priority: "B1" },
+          { name: "Dr. Lisa Thompson", specialty: "Endocrinologist", volume: "Low", startProb: 0.45, stopRisk: 0.52, eligiblePts: 15, priority: "C1" }
+        ]
+      }
+    },
+    {
+      id: 2,
+      title: "Predictive Trigger Engine",
+      description: "Deploying predictive models to identify critical, time-sensitive events such as newly eligible patients, switching risk, and adoption propensity.",
+      icon: (
+        <svg className="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      ),
+      mockupData: {
+        title: "Predictive Triggers Dashboard",
+        triggers: [
+          { hcp: "Dr. Sarah Chen", trigger: "High Switching Risk", probability: 0.87, urgency: "High", action: "Retention Visit", timeline: "Next 7 days" },
+          { hcp: "Dr. Michael Rodriguez", trigger: "New Eligible Patients", probability: 0.92, urgency: "Medium", action: "Educational Visit", timeline: "Next 14 days" },
+          { hcp: "Dr. Jennifer Kim", trigger: "Adoption Propensity", probability: 0.78, urgency: "High", action: "Product Demo", timeline: "Next 5 days" },
+          { hcp: "Dr. Robert Johnson", trigger: "Competitor Threat", probability: 0.65, urgency: "Medium", action: "Competitive Positioning", timeline: "Next 10 days" }
+        ]
+      }
+    },
+    {
+      id: 3,
+      title: "Advanced Behavioral Segmentation",
+      description: "Building sophisticated HCP segmentation models based on prescription behaviors, engagement history, and decision drivers.",
+      icon: (
+        <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+      ),
+      mockupData: {
+        title: "HCP Behavioral Segments",
+        segments: [
+          { name: "Early Adopters", count: 156, characteristics: "Quick to try new therapies, high engagement", messaging: "Innovation-focused, clinical evidence", color: "bg-green-500" },
+          { name: "Evidence Seekers", count: 243, characteristics: "Data-driven, cautious prescribers", messaging: "Comprehensive studies, peer testimonials", color: "bg-blue-500" },
+          { name: "Relationship Driven", count: 189, characteristics: "Values personal connections, loyalty", messaging: "Relationship-building, trust-focused", color: "bg-purple-500" },
+          { name: "Cost Conscious", count: 127, characteristics: "Budget-aware, value-focused", messaging: "Economic benefits, cost-effectiveness", color: "bg-orange-500" }
+        ]
+      }
+    },
+    {
+      id: 4,
+      title: "Intelligent Territory Optimization",
+      description: "Optimizing and ranking triggered HCPs for each territory, ensuring clear prioritized lists that maximize field capacity.",
+      icon: (
+        <svg className="h-8 w-8 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 9m0 8V9m0 0V7" />
+        </svg>
+      ),
+      mockupData: {
+        title: "Territory Optimization View",
+        territories: [
+          { name: "Northeast Metro", rep: "John Smith", hcpCount: 45, priorityHCPs: 12, coverage: 87, efficiency: 92 },
+          { name: "Southwest Rural", rep: "Maria Garcia", hcpCount: 32, priorityHCPs: 8, coverage: 78, efficiency: 85 },
+          { name: "Central Urban", rep: "David Lee", hcpCount: 67, priorityHCPs: 18, coverage: 91, efficiency: 88 }
+        ]
+      }
+    }
+  ];
+
+  const sampleHCP = {
+    name: "Dr. Sarah Chen",
+    specialty: "Cardiologist",
+    location: "Boston Medical Center",
+    overallScore: 92,
+    segment: "Early Adopter",
+    triggers: [
+      { type: "High Switching Risk", score: 87, urgency: "High" },
+      { type: "New Eligible Patients", score: 76, urgency: "Medium" }
+    ],
+    metrics: {
+      eligiblePatients: 45,
+      currentPrescriptions: 28,
+      adoptionPropensity: 0.85,
+      competitorRisk: 0.23
+    },
+    messaging: {
+      primary: "Focus on clinical efficacy and patient outcomes",
+      secondary: "Emphasize innovation and latest research",
+      approach: "Data-driven conversation with peer testimonials"
+    }
+  };
+
+  return (
+    <div className="bg-white min-h-screen">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-b from-blue-50 to-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
+          <AnimatedSection>
+            <div className="text-center max-w-4xl mx-auto">
+              <motion.h1 
+                className="text-5xl font-extrabold text-gray-dark leading-tight mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                Engage the <span className="text-blue-600">Right HCP</span>, at the <span className="text-purple-600">Right Moment</span>, for the <span className="text-green-600">Right Reason</span>
+              </motion.h1>
+              <motion.p 
+                className="text-xl text-gray-medium leading-relaxed mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                Move beyond static call plans. Our <span className="font-bold text-blue-600">HCP Precision Targeting</span> program transforms your commercial strategy with a dynamic, AI-powered engine that identifies high-potential HCPs and delivers actionable triggers to your field force, maximizing brand adoption and ROI.
+              </motion.p>
+              <motion.div
+                className="flex flex-col sm:flex-row gap-4 justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  Unlock Your Targeting Potential
+                </button>
+                <button className="text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-blue-200 hover:bg-blue-50 transition-all duration-300">
+                  See Our Approach →
+                </button>
+              </motion.div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Problem Section */}
+      <div className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-8">
+                Your market moves daily. <span className="text-red-600">Your annual call plan doesn't.</span>
+              </h2>
+              
+              <div className="grid md:grid-cols-2 gap-8 text-left">
+                <div className="bg-white p-8 rounded-2xl shadow-lg">
+                  <h3 className="text-xl font-bold text-gray-dark mb-4">The Static Targeting Problem</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    In the fast-paced biopharma market, static, volume-based target lists become obsolete the moment they're created. This leads to inefficient resource allocation, missed conversations with high-potential prescribers, and a reactive posture to competitive threats.
+                  </p>
+                </div>
+                <div className="bg-white p-8 rounded-2xl shadow-lg">
+                  <h3 className="text-xl font-bold text-gray-dark mb-4">The Capacity Challenge</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Your sales representatives have limited time and capacity. Arming them with a generic list means they are flying blind, unable to prioritize their efforts on the HCPs who are actively making critical treatment decisions <em>now</em>. The result is wasted effort and a slower adoption curve.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Solution Section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="max-w-4xl mx-auto text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-8">
+                Introducing Our <span className="text-blue-600">HCP Precision Targeting</span> Program
+              </h2>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                We replace outdated targeting with a living, breathing ecosystem of opportunities. Our program is an end-to-end solution that combines sophisticated predictive modeling, behavioral segmentation, and intelligent optimization to deliver a prioritized and actionable list of HCPs to your field force on a regular cadence. We tell your reps exactly <strong>who</strong> to see, <strong>when</strong> to engage them, and <strong>why</strong> it matters.
+              </p>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Four Pillars Section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-4">
+                From Data Overload to <span className="text-blue-600">Actionable Intelligence</span>
+              </h2>
+              <p className="text-xl text-gray-medium">Our Four-Pillar Approach to Precision</p>
+            </div>
+
+            <div className="space-y-24">
+              {/* Pillar 1: Foundational Universe Design */}
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="bg-white rounded-2xl p-8 shadow-lg border border-blue-200">
+                  <div className="flex items-start space-x-4 mb-6">
+                    <div className="bg-blue-100 p-4 rounded-full">
+                      <svg className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-dark mb-2">1. Foundational Universe Design</h3>
+                      <p className="text-gray-600 leading-relaxed mb-4">
+                        We begin by building a comprehensive and dynamic universe of priority HCPs. Moving beyond simple volume, we deploy predictive models—such as <strong>likelihood to initiate</strong> a new patient (<strong>Start</strong>) or <strong>risk of discontinuation</strong> (<strong>Stop</strong>)—to create a data-backed roadmap that forms the strategic foundation for all marketing and sales activities.
+                      </p>
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <h4 className="font-semibold text-blue-800 mb-2">Key Features:</h4>
+                        <ul className="text-sm text-blue-700 space-y-1">
+                          <li>• Predictive start/stop probability scoring</li>
+                          <li>• Dynamic HCP prioritization (A1, A2, B1, C1)</li>
+                          <li>• Eligible patient count analysis</li>
+                          <li>• Real-time universe updates</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden border">
+                  <div className="bg-blue-600 text-white p-4">
+                    <h4 className="font-bold">HCP Universe Dashboard</h4>
+                  </div>
+                  <div className="p-4">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left py-2">HCP Name</th>
+                            <th className="text-left py-2">Specialty</th>
+                            <th className="text-center py-2">Start Prob</th>
+                            <th className="text-center py-2">Stop Risk</th>
+                            <th className="text-center py-2">Eligible Pts</th>
+                            <th className="text-center py-2">Priority</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {pillars[0].mockupData.hcps.map((hcp, i) => (
+                            <tr key={i} className="border-b hover:bg-gray-50">
+                              <td className="py-2 font-medium">{hcp.name}</td>
+                              <td className="py-2 text-gray-600">{hcp.specialty}</td>
+                              <td className="py-2 text-center">
+                                <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
+                                  {Math.round(hcp.startProb * 100)}%
+                                </span>
+                              </td>
+                              <td className="py-2 text-center">
+                                <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">
+                                  {Math.round(hcp.stopRisk * 100)}%
+                                </span>
+                              </td>
+                              <td className="py-2 text-center font-medium">{hcp.eligiblePts}</td>
+                              <td className="py-2 text-center">
+                                <span className={`px-2 py-1 rounded text-xs font-bold ${
+                                  hcp.priority.startsWith('A') ? 'bg-red-100 text-red-800' :
+                                  hcp.priority.startsWith('B') ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {hcp.priority}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pillar 2: Predictive Trigger Engine */}
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden border order-2 lg:order-1">
+                  <div className="bg-purple-600 text-white p-4">
+                    <h4 className="font-bold">HCP Trigger Alerts</h4>
+                  </div>
+                  <div className="p-4">
+                    <div className="space-y-3">
+                      {[
+                        { hcp: "Dr. Sarah Chen", score: 87, trigger: "High Switching Risk", urgency: "High", color: "red" },
+                        { hcp: "Dr. Michael Rodriguez", score: 92, trigger: "New Eligible Patients", urgency: "Medium", color: "yellow" },
+                        { hcp: "Dr. Jennifer Kim", score: 78, trigger: "Adoption Propensity", urgency: "High", color: "red" },
+                        { hcp: "Dr. Robert Johnson", score: 65, trigger: "Competitor Threat", urgency: "Medium", color: "yellow" }
+                      ].map((item, i) => (
+                        <div key={i} className="flex items-center justify-between p-3 border rounded-lg hover:shadow-md transition-shadow">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                              <svg className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="font-semibold text-gray-dark">{item.hcp}</p>
+                              <p className="text-sm text-gray-600">{item.trigger}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <div className="text-right">
+                              <p className="text-lg font-bold text-purple-600">{item.score}%</p>
+                              <p className="text-xs text-gray-500">Probability</p>
+                            </div>
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                              item.color === 'red' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                              {item.urgency}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-8 shadow-lg border border-purple-200 order-1 lg:order-2">
+                  <div className="flex items-start space-x-4 mb-6">
+                    <div className="bg-purple-100 p-4 rounded-full">
+                      <svg className="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-dark mb-2">2. Predictive Trigger Engine</h3>
+                      <p className="text-gray-600 leading-relaxed mb-4">
+                        This is the heart of our program. We develop and deploy a suite of predictive models aligned with your core brand objectives. These triggers identify critical, time-sensitive events, such as an HCP with newly <strong>eligible patients</strong>, an HCP <strong>at risk of switching</strong> to a competitor, or an HCP showing a high <strong>propensity to adopt</strong> your brand.
+                      </p>
+                      <div className="bg-purple-50 p-4 rounded-lg">
+                        <h4 className="font-semibold text-purple-800 mb-2">Trigger Types:</h4>
+                        <ul className="text-sm text-purple-700 space-y-1">
+                          <li>• High switching risk detection</li>
+                          <li>• New eligible patient identification</li>
+                          <li>• Adoption propensity scoring</li>
+                          <li>• Competitive threat alerts</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pillar 3: Advanced Behavioral Segmentation */}
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="bg-white rounded-2xl p-8 shadow-lg border border-green-200">
+                  <div className="flex items-start space-x-4 mb-6">
+                    <div className="bg-green-100 p-4 rounded-full">
+                      <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-dark mb-2">3. Advanced Behavioral Segmentation</h3>
+                      <p className="text-gray-600 leading-relaxed mb-4">
+                        A one-size-fits-all message is ineffective. We build sophisticated HCP segmentation models based on past prescription behaviors, engagement history, and other drivers. This allows your team to understand the "why" behind an HCP's decisions and equip your reps with the right messaging to have a more impactful conversation.
+                      </p>
+                      <div className="bg-green-50 p-4 rounded-lg">
+                        <h4 className="font-semibold text-green-800 mb-2">Segmentation Benefits:</h4>
+                        <ul className="text-sm text-green-700 space-y-1">
+                          <li>• Personalized messaging strategies</li>
+                          <li>• Behavioral pattern recognition</li>
+                          <li>• Engagement optimization</li>
+                          <li>• Decision driver analysis</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden border">
+                  <div className="bg-green-600 text-white p-4">
+                    <h4 className="font-bold">HCP Behavioral Segments</h4>
+                  </div>
+                  <div className="p-6">
+                    <div className="grid grid-cols-2 gap-4">
+                      {[
+                        { name: "Early Adopters", count: 156, color: "bg-green-500", avatar: "EA" },
+                        { name: "Evidence Seekers", count: 243, color: "bg-blue-500", avatar: "ES" },
+                        { name: "Relationship Driven", count: 189, color: "bg-purple-500", avatar: "RD" },
+                        { name: "Cost Conscious", count: 127, color: "bg-orange-500", avatar: "CC" }
+                      ].map((segment, i) => (
+                        <div key={i} className="text-center p-4 border rounded-lg hover:shadow-md transition-shadow">
+                          <div className={`w-16 h-16 ${segment.color} rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-3`}>
+                            {segment.avatar}
+                          </div>
+                          <h5 className="font-bold text-gray-dark mb-1">{segment.name}</h5>
+                          <p className="text-sm text-gray-600">{segment.count} HCPs</p>
+                          <div className="mt-3 flex justify-center space-x-1">
+                            {[...Array(3)].map((_, j) => (
+                              <div key={j} className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center">
+                                <svg className="h-3 w-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pillar 4: Intelligent Territory Optimization */}
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden border order-2 lg:order-1">
+                  <div className="bg-orange-600 text-white p-4">
+                    <h4 className="font-bold">Territory Performance Optimization</h4>
+                  </div>
+                  <div className="p-6">
+                    {/* Territory Map Visualization */}
+                    <div className="relative bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-6 mb-4">
+                      <div className="grid grid-cols-3 gap-4 h-32">
+                        {[
+                          { name: "Northeast", efficiency: 92, hcps: 45, color: "bg-green-500" },
+                          { name: "Southwest", efficiency: 85, hcps: 32, color: "bg-yellow-500" },
+                          { name: "Central", efficiency: 88, hcps: 67, color: "bg-blue-500" }
+                        ].map((territory, i) => (
+                          <div key={i} className="relative">
+                            <div className={`${territory.color} rounded-lg p-3 h-full flex flex-col justify-center items-center text-white shadow-lg`}>
+                              <h6 className="font-bold text-sm">{territory.name}</h6>
+                              <p className="text-xs">{territory.hcps} HCPs</p>
+                              <p className="text-xs">{territory.efficiency}% Eff</p>
+                            </div>
+                            {/* Connection lines */}
+                            {i < 2 && (
+                              <div className="absolute top-1/2 -right-2 w-4 h-0.5 bg-gray-300 transform -translate-y-1/2"></div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Optimization Metrics */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-white border rounded-lg p-3 text-center">
+                        <p className="text-2xl font-bold text-orange-600">144</p>
+                        <p className="text-xs text-gray-600">Total HCPs</p>
+                      </div>
+                      <div className="bg-white border rounded-lg p-3 text-center">
+                        <p className="text-2xl font-bold text-green-600">38</p>
+                        <p className="text-xs text-gray-600">Priority HCPs</p>
+                      </div>
+                      <div className="bg-white border rounded-lg p-3 text-center">
+                        <p className="text-2xl font-bold text-blue-600">88%</p>
+                        <p className="text-xs text-gray-600">Avg Coverage</p>
+                      </div>
+                      <div className="bg-white border rounded-lg p-3 text-center">
+                        <p className="text-2xl font-bold text-purple-600">88%</p>
+                        <p className="text-xs text-gray-600">Avg Efficiency</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-8 shadow-lg border border-orange-200 order-1 lg:order-2">
+                  <div className="flex items-start space-x-4 mb-6">
+                    <div className="bg-orange-100 p-4 rounded-full">
+                      <svg className="h-8 w-8 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 9m0 8V9m0 0V7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-dark mb-2">4. Intelligent Territory Optimization</h3>
+                      <p className="text-gray-600 leading-relaxed mb-4">
+                        We translate powerful insights into on-the-ground action. Our engine optimizes and ranks the triggered HCPs for each specific territory, ensuring every sales representative receives a clear, prioritized, and manageable list of opportunities to act on. This maximizes field capacity and ensures focus.
+                      </p>
+                      <div className="bg-orange-50 p-4 rounded-lg">
+                        <h4 className="font-semibold text-orange-800 mb-2">Optimization Features:</h4>
+                        <ul className="text-sm text-orange-700 space-y-1">
+                          <li>• Territory-specific HCP ranking</li>
+                          <li>• Rep capacity optimization</li>
+                          <li>• Geographic efficiency analysis</li>
+                          <li>• Performance tracking & adjustment</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* HCP Detail View Section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-4">
+                Complete <span className="text-blue-600">HCP Intelligence</span> at Your Fingertips
+              </h2>
+              <p className="text-xl text-gray-medium">Detailed HCP profiles with actionable insights and messaging guidance</p>
+            </div>
+
+            <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border">
+              {/* HCP Header */}
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-2xl font-bold">{sampleHCP.name}</h3>
+                    <p className="text-blue-100">{sampleHCP.specialty} • {sampleHCP.location}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bold">{sampleHCP.overallScore}</div>
+                    <div className="text-sm text-blue-100">Overall Score</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid lg:grid-cols-3 gap-6 p-6">
+                {/* Predictive Triggers */}
+                <div className="bg-red-50 rounded-xl p-6 border border-red-200">
+                  <h4 className="font-bold text-gray-dark mb-4 flex items-center">
+                    <svg className="h-5 w-5 text-red-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                    Active Triggers
+                  </h4>
+                  <div className="space-y-3">
+                    {sampleHCP.triggers.map((trigger, i) => (
+                      <div key={i} className="bg-white p-3 rounded-lg border">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-medium text-sm">{trigger.type}</span>
+                          <span className={`px-2 py-1 rounded text-xs font-bold ${
+                            trigger.urgency === 'High' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
+                          }`}>
+                            {trigger.urgency}
+                          </span>
+                        </div>
+                        <div className="text-2xl font-bold text-red-600">{trigger.score}%</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* HCP Metrics */}
+                <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                  <h4 className="font-bold text-gray-dark mb-4 flex items-center">
+                    <svg className="h-5 w-5 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Key Metrics
+                  </h4>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm text-gray-600">Eligible Patients</span>
+                        <span className="font-bold">{sampleHCP.metrics.eligiblePatients}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm text-gray-600">Current Prescriptions</span>
+                        <span className="font-bold">{sampleHCP.metrics.currentPrescriptions}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm text-gray-600">Adoption Propensity</span>
+                        <span className="font-bold text-green-600">{Math.round(sampleHCP.metrics.adoptionPropensity * 100)}%</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm text-gray-600">Competitor Risk</span>
+                        <span className="font-bold text-orange-600">{Math.round(sampleHCP.metrics.competitorRisk * 100)}%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Messaging Strategy */}
+                <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                  <h4 className="font-bold text-gray-dark mb-4 flex items-center">
+                    <svg className="h-5 w-5 text-green-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    Messaging Strategy
+                  </h4>
+                  <div className="space-y-4">
+                    <div>
+                      <span className="text-xs font-semibold text-green-700 uppercase tracking-wide">Segment</span>
+                      <p className="font-bold text-green-600">{sampleHCP.segment}</p>
+                    </div>
+                    <div>
+                      <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Primary Message</span>
+                      <p className="text-sm text-gray-600">{sampleHCP.messaging.primary}</p>
+                    </div>
+                    <div>
+                      <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Secondary Focus</span>
+                      <p className="text-sm text-gray-600">{sampleHCP.messaging.secondary}</p>
+                    </div>
+                    <div>
+                      <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Approach</span>
+                      <p className="text-sm text-gray-600">{sampleHCP.messaging.approach}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Outcomes Section */}
+      <div className="bg-gradient-to-b from-gray-50 to-white py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-4">
+                Empower Your Field Force, <span className="text-blue-600">Accelerate Brand Growth</span>
+              </h2>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: (
+                    <svg className="h-12 w-12 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  ),
+                  title: "Maximize Field Force Effectiveness",
+                  description: "Equip your reps to engage the right HCP at the right time with a clear, data-driven reason. This focuses their efforts, optimizes their time, and drives more meaningful clinical conversations."
+                },
+                {
+                  icon: (
+                    <svg className="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  ),
+                  title: "Preempt Competitive Threats & Secure Market Share",
+                  description: "Our proactive 'risk of switching' and behavioral models identify competitive threats early, allowing for timely intervention to protect and grow your brand's position."
+                },
+                {
+                  icon: (
+                    <svg className="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                  ),
+                  title: "Drive Measurable ROI and Accelerate Adoption",
+                  description: "By focusing your entire commercial effort on the HCPs with the highest potential, you optimize promotional investment, shorten the adoption curve for new patients, and achieve sustainable brand growth."
+                }
+              ].map((outcome, index) => (
+                <motion.div
+                  key={index}
+                  className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
+                  whileHover={{ y: -5 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <div className="bg-gray-50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                    {outcome.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-dark mb-4">{outcome.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{outcome.description}</p>
+                </motion.div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Therapeutic Areas Section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-4">
+                Proven Across the <span className="text-blue-600">Biopharmaceutical Landscape</span>
+              </h2>
+              <p className="text-xl text-gray-medium">
+                Expertise You Can Trust, In the Markets That Matter
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-blue-600 text-white">
+                    <tr>
+                      <th className="text-left py-4 px-6 font-bold">Therapeutic Area</th>
+                      <th className="text-left py-4 px-6 font-bold">Key Focus Areas</th>
+                      <th className="text-left py-4 px-6 font-bold">Brand Experience</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {therapeuticAreas.map((area, index) => (
+                      <tr key={index} className="border-b hover:bg-blue-50 transition-colors">
+                        <td className="py-4 px-6 font-semibold text-gray-dark">{area.area}</td>
+                        <td className="py-4 px-6 text-gray-600">{area.focus}</td>
+                        <td className="py-4 px-6">
+                          <div className="flex flex-wrap gap-2">
+                            {area.brands.split(', ').map((brand, i) => (
+                              <span key={i} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                                {brand}
+                              </span>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Final CTA Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center text-white max-w-4xl mx-auto">
+              <h2 className="text-4xl font-extrabold mb-8">
+                Ready to Transform Your Field Engagement Strategy?
+              </h2>
+              <p className="text-xl mb-12 opacity-90 leading-relaxed">
+                Stop relying on static lists and empower your team with the dynamic intelligence needed to win. Let's discuss how our HCP Precision Targeting program can be tailored to your brand's specific objectives.
+              </p>
+              <motion.button
+                className="bg-white text-blue-600 px-12 py-4 rounded-xl font-bold text-xl hover:shadow-2xl transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Schedule a Consultation
+              </motion.button>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AutoML = () => {
+  const [showImpactAnimation, setShowImpactAnimation] = React.useState(false);
+
+  const capabilities = [
+    {
+      id: 1,
+      title: "Automated Data Ingestion",
+      description: "Seamlessly connect and unify disparate data sources, from massive claims datasets to internal CRM activity, without complex manual scripting.",
+      icon: (
+        <svg className="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 7v10c0 2.21 1.79 4 4 4h8c2.21 0 4-1.79 4-4V7M4 7c0-2.21 1.79-4 4-4h8c2.21 0 4 1.79 4 4M4 7h16M8 11h8M8 15h8" />
+        </svg>
+      )
+    },
+    {
+      id: 2,
+      title: "Domain-Tuned Feature Engineering",
+      description: "The platform automatically generates hundreds of relevant features and custom aggregations specifically tuned for the life sciences domain—from patient journey waypoints to HCP engagement patterns.",
+      icon: (
+        <svg className="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+      )
+    },
+    {
+      id: 3,
+      title: "Robust Model Training & Tracking",
+      description: "Leverage a powerful engine for automated feature selection, model selection, and hyperparameter tuning. Track every experiment and version with ease to ensure reproducibility and governance.",
+      icon: (
+        <svg className="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      )
+    },
+    {
+      id: 4,
+      title: "Effortless Deployment",
+      description: "Our modular, package-like structure allows you to deploy trained models quickly and efficiently, moving from successful experiment to production-ready asset without refactoring code.",
+      icon: (
+        <svg className="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+        </svg>
+      )
+    }
+  ];
+
+  const modelTypes = [
+    {
+      title: "Predictive Models",
+      examples: [
+        "Forecast HCP brand adoption",
+        "Identify patients eligible for a specific therapy",
+        "Predict physician risk or prescribing potential"
+      ],
+      note: "Leverages claims data combined with proprietary CRM and HCP data",
+      color: "purple"
+    },
+    {
+      title: "Segmentation Models", 
+      examples: [
+        "Create sophisticated HCP segments based on prescribing behavior",
+        "Develop nuanced patient population segments for targeted engagement"
+      ],
+      note: "Uncover hidden patterns in massive patient-level datasets",
+      color: "indigo"
+    },
+    {
+      title: "Data Enrichment Models",
+      examples: [
+        "Infer missing biomarker status",
+        "Predict patient lines of therapy", 
+        "Fill critical gaps in your data to power more accurate downstream analytics"
+      ],
+      note: "Turn incomplete data into a strategic asset",
+      color: "blue"
+    }
+  ];
+
+  return (
+    <div className="bg-white min-h-screen">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-b from-purple-50 to-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
+          <AnimatedSection>
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <motion.h1 
+                  className="text-5xl font-extrabold text-gray-dark leading-tight"
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8 }}
+                >
+                  Build Custom Commercial Models <span className="text-purple-600">70% Faster</span>
+                </motion.h1>
+                <motion.p 
+                  className="mt-6 text-xl text-gray-medium leading-relaxed"
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                >
+                  Introducing <span className="font-bold text-purple-600">AutoML</span>, the end-to-end platform that automates the entire model-building lifecycle. Purpose-built for pharma and life sciences, our engine automates data ingestion and domain-specific feature engineering, empowering your analytics teams to deliver insights at the speed of business.
+                </motion.p>
+                <motion.div
+                  className="mt-8 flex flex-col sm:flex-row gap-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    See AutoML in Action
+                  </button>
+                  <button className="text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-purple-200 hover:bg-purple-50 transition-all duration-300">
+                    Explore Key Features →
+                  </button>
+                </motion.div>
+              </div>
+              
+              {/* AutoML Pipeline Visual */}
+              <div className="flex justify-center">
+                <motion.div 
+                  className="relative w-[500px] h-96 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl border border-purple-200 shadow-2xl overflow-hidden"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.6 }}
+                >
+                  {/* Input Data Blocks (Left Side) */}
+                  <div className="absolute left-8 top-1/2 transform -translate-y-1/2">
+                    <div className="text-xs font-semibold text-gray-600 mb-4 text-center">Raw Data Sources</div>
+                    {[
+                      { label: 'Claims', color: 'bg-gray-400', delay: 0 },
+                      { label: 'CRM', color: 'bg-gray-500', delay: 0.3 },
+                      { label: 'EHR', color: 'bg-gray-400', delay: 0.6 },
+                      { label: 'HCP', color: 'bg-gray-500', delay: 0.9 }
+                    ].map((block, i) => (
+                      <motion.div
+                        key={i}
+                        className={`${block.color} text-white text-xs font-bold rounded-lg p-3 mb-2 w-16 text-center shadow-md`}
+                        animate={{
+                          x: [0, 160, 160, 160, 0],
+                          opacity: [1, 1, 0.3, 0, 1],
+                        }}
+                        transition={{
+                          duration: 4,
+                          delay: block.delay,
+                          repeat: Infinity,
+                          repeatType: 'loop',
+                          ease: 'easeInOut'
+                        }}
+                      >
+                        {block.label}
+                      </motion.div>
+                    ))}
+                  </div>
+                  
+                  {/* AutoML Brain Engine (Center) */}
+                  <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <motion.div
+                      className="relative w-24 h-24 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center shadow-2xl"
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        rotate: [0, 360],
+                        boxShadow: [
+                          '0 0 0 0 rgba(124, 58, 237, 0)',
+                          '0 0 0 15px rgba(124, 58, 237, 0.2)',
+                          '0 0 0 0 rgba(124, 58, 237, 0)'
+                        ]
+                      }}
+                      transition={{
+                        scale: { duration: 2, repeat: Infinity, repeatType: 'loop' },
+                        rotate: { duration: 8, repeat: Infinity, ease: 'linear' },
+                        boxShadow: { duration: 2, repeat: Infinity, repeatType: 'loop' }
+                      }}
+                    >
+                      {/* Brain/AI Icon */}
+                      <svg className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                      
+                      {/* Pulsing rings around the brain */}
+                      <motion.div
+                        className="absolute inset-0 border-2 border-purple-300 rounded-full"
+                        animate={{
+                          scale: [1, 1.5, 2],
+                          opacity: [0.8, 0.3, 0],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          repeatType: 'loop',
+                        }}
+                      />
+                      <motion.div
+                        className="absolute inset-0 border-2 border-indigo-300 rounded-full"
+                        animate={{
+                          scale: [1, 1.5, 2],
+                          opacity: [0.8, 0.3, 0],
+                        }}
+                        transition={{
+                          duration: 2,
+                          delay: 0.5,
+                          repeat: Infinity,
+                          repeatType: 'loop',
+                        }}
+                      />
+                    </motion.div>
+                    
+                    {/* AutoML Label */}
+                    <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-bold text-purple-600 whitespace-nowrap">
+                      AutoML Engine
+                    </div>
+                  </div>
+                  
+                  {/* Output Models (Right Side) */}
+                  <div className="absolute right-8 top-1/2 transform -translate-y-1/2">
+                    <div className="text-xs font-semibold text-purple-600 mb-4 text-center">ML Models</div>
+                    {[
+                      { label: 'Predictive', color: 'from-purple-500 to-purple-600', delay: 2 },
+                      { label: 'Segment', color: 'from-indigo-500 to-indigo-600', delay: 2.3 },
+                      { label: 'Enrichment', color: 'from-blue-500 to-blue-600', delay: 2.6 }
+                    ].map((model, i) => (
+                      <motion.div
+                        key={i}
+                        className={`bg-gradient-to-r ${model.color} text-white text-xs font-bold rounded-lg p-3 mb-2 w-20 text-center shadow-lg`}
+                        initial={{ opacity: 0, scale: 0, x: -50 }}
+                        animate={{ 
+                          opacity: [0, 1, 1], 
+                          scale: [0, 1.1, 1], 
+                          x: [-50, 0, 0] 
+                        }}
+                        transition={{
+                          duration: 0.8,
+                          delay: model.delay,
+                          repeat: Infinity,
+                          repeatDelay: 1.2,
+                          ease: 'easeOut'
+                        }}
+                      >
+                        {model.label}
+                      </motion.div>
+                    ))}
+                  </div>
+                  
+                  {/* Data Flow Lines */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                    {/* Left to center flow */}
+                    <motion.path
+                      d="M 120 192 Q 180 192 220 192"
+                      stroke="url(#gradient1)"
+                      strokeWidth="2"
+                      fill="none"
+                      strokeDasharray="5,5"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: [0, 1, 0] }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        repeatType: 'loop',
+                        ease: 'easeInOut'
+                      }}
+                    />
+                    
+                    {/* Center to right flow */}
+                    <motion.path
+                      d="M 280 192 Q 340 192 380 192"
+                      stroke="url(#gradient2)"
+                      strokeWidth="2"
+                      fill="none"
+                      strokeDasharray="5,5"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: [0, 1, 0] }}
+                      transition={{
+                        duration: 2,
+                        delay: 1,
+                        repeat: Infinity,
+                        repeatType: 'loop',
+                        ease: 'easeInOut'
+                      }}
+                    />
+                    
+                    {/* Gradients for the flow lines */}
+                    <defs>
+                      <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#9CA3AF" />
+                        <stop offset="100%" stopColor="#7C3AED" />
+                      </linearGradient>
+                      <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#7C3AED" />
+                        <stop offset="100%" stopColor="#3B82F6" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  
+                  {/* Background Pattern */}
+                  <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-4 left-4 w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <div className="absolute top-8 right-12 w-1 h-1 bg-indigo-400 rounded-full"></div>
+                    <div className="absolute bottom-12 left-8 w-1.5 h-1.5 bg-purple-400 rounded-full"></div>
+                    <div className="absolute bottom-4 right-4 w-2 h-2 bg-indigo-400 rounded-full"></div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Problem Section */}
+      <div className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-8">
+                Your business needs answers. <span className="text-purple-600">Your data scientists are stuck in the pipeline.</span>
+              </h2>
+              
+              <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
+                <p>
+                  In the competitive pharma landscape, speed and precision are everything. Your commercial teams need to predict HCP adoption, segment patient populations, and identify at-risk providers. But building the custom models to deliver these insights is a slow, manual, and repetitive marathon of data wrangling and coding.
+                </p>
+                <p>
+                  The process is bogged down by disconnected data sources (Claims, CRM, EHR), redundant feature engineering logic for every new project, and generic tools that don't understand the nuances of pharma data. This analytics bottleneck means valuable time is spent on data prep instead of strategic analysis, delaying critical decisions.
+                </p>
+              </div>
+
+              {/* Problem Icons */}
+              <div className="grid md:grid-cols-3 gap-8 mt-12">
+                {[
+                  {
+                    icon: (
+                      <svg className="h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                      </svg>
+                    ),
+                    title: "Disconnected Data",
+                    description: "Multiple data sources that don't talk to each other"
+                  },
+                  {
+                    icon: (
+                      <svg className="h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                    ),
+                    title: "Redundant Work",
+                    description: "Repeating the same data prep for every project"
+                  },
+                  {
+                    icon: (
+                      <svg className="h-12 w-12 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    ),
+                    title: "Slow Progress",
+                    description: "Months to build what should take days"
+                  }
+                ].map((item, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                    <div className="bg-white p-4 rounded-full shadow-lg mb-4">
+                      {item.icon}
+                    </div>
+                    <h3 className="font-bold text-gray-dark mb-2">{item.title}</h3>
+                    <p className="text-sm text-gray-600 text-center">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Solution Section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="max-w-4xl mx-auto text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-8">
+                Stop building from scratch. Start accelerating with <span className="text-purple-600">intelligent automation.</span>
+              </h2>
+              <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                AutoML is our platform designed specifically to break the analytics bottleneck for pharma commercial teams. We've streamlined the entire process, from raw data to deployed model, by automating the most time-consuming and complex steps.
+              </p>
+              
+              {/* Key Differentiator Callout */}
+              <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-8 border-l-4 border-purple-500">
+                <p className="text-lg font-semibold text-gray-dark">
+                  Natively integrating with essential data sources like <span className="text-purple-600 font-bold">IQVIA claims</span> and your own <span className="text-purple-600 font-bold">proprietary data (CRM activity, HCP segments)</span>, AutoML provides the foundational speed and intelligence your team needs to operate at scale.
+                </p>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Key Capabilities Section */}
+      <div className="bg-gradient-to-b from-purple-50 to-white py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-4">
+                The Engine That Powers <span className="text-purple-600">Faster, Smarter Models</span>
+              </h2>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {capabilities.map((capability, index) => (
+                <motion.div
+                  key={capability.id}
+                  className="bg-white bg-opacity-60 backdrop-blur-sm rounded-2xl p-8 border border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <div className="flex items-start space-x-6">
+                    <div className="bg-purple-100 p-4 rounded-full flex-shrink-0">
+                      {capability.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-dark mb-4">
+                        {capability.id}. {capability.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed">{capability.description}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Impact Section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-12">
+                Go From Raw Data to First-Cut Model in a <span className="text-purple-600">Fraction of the Time</span>
+              </h2>
+              
+              {/* 70% Stat Card */}
+              <motion.div 
+                className="max-w-md mx-auto bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl p-12 border border-purple-200 shadow-2xl"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8 }}
+                onViewportEnter={() => setShowImpactAnimation(true)}
+              >
+                <motion.div 
+                  className="text-8xl font-extrabold text-purple-600 mb-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                >
+                  <AnimatedCounter end="70" duration={2} suffix="%" />
+                </motion.div>
+                <p className="text-xl font-bold text-gray-dark">Reduction in Model Development Time</p>
+              </motion.div>
+            </div>
+
+            {/* Benefits List */}
+            <div className="grid md:grid-cols-3 gap-8 mt-16">
+              {[
+                {
+                  title: "Accelerate Timelines",
+                  description: "Deliver the first cut of any model—predictive, segmentation, or enrichment—up to 70% faster, allowing your team to iterate and refine in days, not months."
+                },
+                {
+                  title: "Eliminate Redundant Work", 
+                  description: "Free your data scientists from repetitive data prep and feature engineering. Let them focus on high-value strategic analysis while the platform handles the heavy lifting."
+                },
+                {
+                  title: "Increase Model Power & Consistency",
+                  description: "Leverage a standardized, best-practice approach to feature engineering and training that is tuned specifically for pharma data, resulting in more robust and reliable models."
+                }
+              ].map((benefit, index) => (
+                <div key={index} className="bg-white rounded-2xl p-6 border border-purple-100 shadow-lg">
+                  <h3 className="text-lg font-bold text-gray-dark mb-4">{benefit.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
+                </div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* What You Can Build Section */}
+      <div className="bg-gradient-to-b from-gray-50 to-white py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark mb-4">
+                Build Any Model Your <span className="text-purple-600">Commercial Strategy Demands</span>
+              </h2>
+              <p className="text-xl text-gray-medium max-w-3xl mx-auto">
+                AutoML is a flexible engine that empowers your team to rapidly develop the full spectrum of models required for modern commercial analytics.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {modelTypes.map((model, index) => (
+                <motion.div
+                  key={index}
+                  className="bg-white rounded-2xl p-8 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300"
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  {/* Header with Icon */}
+                  <div className="flex items-center space-x-3 mb-6">
+                    <div className={`p-3 rounded-full ${
+                      model.color === 'purple' ? 'bg-purple-100' :
+                      model.color === 'indigo' ? 'bg-indigo-100' : 'bg-blue-100'
+                    }`}>
+                      <svg className={`h-6 w-6 ${
+                        model.color === 'purple' ? 'text-purple-600' :
+                        model.color === 'indigo' ? 'text-indigo-600' : 'text-blue-600'
+                      }`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        {model.color === 'purple' && (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        )}
+                        {model.color === 'indigo' && (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        )}
+                        {model.color === 'blue' && (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 1.79 4 4 4h8c2.21 0 4-1.79 4-4V7M4 7c0-2.21 1.79-4 4-4h8c2.21 0 4 1.79 4 4M4 7h16" />
+                        )}
+                      </svg>
+                    </div>
+                    <h3 className={`text-xl font-bold ${
+                      model.color === 'purple' ? 'text-purple-600' :
+                      model.color === 'indigo' ? 'text-indigo-600' : 'text-blue-600'
+                    }`}>
+                      {model.title}
+                    </h3>
+                  </div>
+                  
+                  {/* Examples List */}
+                  <div className="space-y-4 mb-6">
+                    {model.examples.map((example, exIndex) => (
+                      <div key={exIndex} className="flex items-start space-x-3">
+                        <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
+                          model.color === 'purple' ? 'bg-purple-500' :
+                          model.color === 'indigo' ? 'bg-indigo-500' : 'bg-blue-500'
+                        }`}></div>
+                        <p className="text-gray-700 text-sm leading-relaxed">{example}</p>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Bottom Note */}
+                  <div className={`p-4 rounded-lg border-l-4 ${
+                    model.color === 'purple' ? 'bg-purple-50 border-purple-500' :
+                    model.color === 'indigo' ? 'bg-indigo-50 border-indigo-500' : 'bg-blue-50 border-blue-500'
+                  }`}>
+                    <p className={`text-sm font-medium italic ${
+                      model.color === 'purple' ? 'text-purple-700' :
+                      model.color === 'indigo' ? 'text-indigo-700' : 'text-blue-700'
+                    }`}>
+                      💡 {model.note}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Final CTA Section */}
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center text-white max-w-4xl mx-auto">
+              <h2 className="text-4xl font-extrabold mb-8">
+                Ready to Revolutionize Your Analytics Workflow?
+              </h2>
+              <p className="text-xl mb-12 opacity-90 leading-relaxed">
+                Stop wrestling with data pipelines and start deploying powerful insights. See how AutoML can transform your commercial analytics and give your team an unbeatable competitive edge.
+              </p>
+              <motion.button
+                className="bg-white text-purple-600 px-12 py-4 rounded-xl font-bold text-xl hover:shadow-2xl transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Schedule Your AutoML Demo
+              </motion.button>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DataEnrichment = () => {
+
+  const marketData = [
+    { name: 'PIK3CA', literature: 40, rawClaims: 4, enriched: 35 },
+    { name: 'BRCA', literature: 15, rawClaims: 1, enriched: 7 },
+    { name: 'HER2-Low', literature: 55, rawClaims: 0, enriched: 50 },
+    { name: 'HR+', literature: 75, rawClaims: 65, enriched: 90 }
+  ];
+
+  const DataVisualization = ({ data }) => (
+    <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-lg">
+      <h4 className="text-2xl font-bold text-gray-dark mb-8 text-center">
+        AI Enrichment Impact: From Invisible to Actionable
+      </h4>
+      
+      <div className="grid md:grid-cols-2 gap-8">
+        {data.map((item, index) => (
+          <div key={item.name} className="bg-gradient-to-br from-gray-50 to-purple-50 rounded-xl p-6 border border-purple-100">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <h5 className="text-lg font-bold text-gray-dark">{item.name} Biomarker</h5>
+              <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
+                {item.literature}% Literature Rate
+              </span>
+            </div>
+            
+            {/* Metrics Cards */}
+            <div className="space-y-4">
+              {/* Raw Claims Data */}
+              <div className="bg-white rounded-lg p-4 border-l-4 border-red-400">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Raw Claims Visibility</p>
+                    <p className="text-2xl font-bold text-red-600">{item.rawClaims}%</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-gray-500">Market Gap</p>
+                    <p className="text-lg font-bold text-red-500">
+                      {item.literature - item.rawClaims}% Hidden
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* AI Enriched Data */}
+              <div className="bg-white rounded-lg p-4 border-l-4 border-purple-500">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">AI Enriched Visibility</p>
+                    <p className="text-2xl font-bold text-purple-600">{item.enriched}%</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-gray-500">Improvement</p>
+                    <p className="text-lg font-bold text-green-600">
+                      +{item.enriched - item.rawClaims}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Impact Multiplier */}
+              <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg p-4 text-white">
+                <div className="text-center">
+                  <p className="text-sm opacity-90">Visibility Multiplier</p>
+                  <p className="text-3xl font-extrabold">
+                    {item.rawClaims === 0 ? '∞' : `${Math.round(item.enriched / item.rawClaims)}x`}
+                  </p>
+                  <p className="text-xs opacity-80">
+                    {item.rawClaims === 0 ? 'Built from scratch' : 'Times improvement'}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Progress Bar Visualization */}
+            <div className="mt-6">
+              <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                <span>Market Coverage</span>
+                <span>{Math.round((item.enriched / item.literature) * 100)}% of Literature Benchmark</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div className="relative h-3 rounded-full overflow-hidden">
+                  {/* Literature benchmark background */}
+                  <div className="absolute inset-0 bg-gray-200"></div>
+                  
+                  {/* Raw claims - tiny red portion */}
+                  <div 
+                    className="absolute left-0 top-0 h-full bg-red-400 transition-all duration-500"
+                    style={{ width: `${(item.rawClaims / item.literature) * 100}%` }}
+                  ></div>
+                  
+                  {/* AI enriched - purple portion */}
+                  <div 
+                    className="absolute left-0 top-0 h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-700 delay-300"
+                    style={{ width: `${(item.enriched / item.literature) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+              
+              {/* Legend */}
+              <div className="flex items-center justify-center space-x-6 mt-3 text-xs">
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-3 bg-red-400 rounded"></div>
+                  <span className="text-gray-600">Raw Claims ({item.rawClaims}%)</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-3 bg-purple-500 rounded"></div>
+                  <span className="text-gray-600">AI Enriched ({item.enriched}%)</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="w-3 h-3 bg-gray-300 rounded"></div>
+                  <span className="text-gray-600">Remaining Gap</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {/* Summary Stats */}
+      <div className="mt-8 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-6 border border-purple-200">
+        <h5 className="text-lg font-bold text-gray-dark mb-4 text-center">Overall Market Transformation</h5>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="text-center">
+            <p className="text-2xl font-bold text-red-600">18%</p>
+            <p className="text-sm text-gray-600">Avg. Raw Visibility</p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl font-bold text-purple-600">46%</p>
+            <p className="text-sm text-gray-600">Avg. Enriched Visibility</p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl font-bold text-green-600">+28%</p>
+            <p className="text-sm text-gray-600">Avg. Improvement</p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl font-bold text-indigo-600">15x</p>
+            <p className="text-sm text-gray-600">Avg. Multiplier</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="bg-gradient-to-b from-purple-50 to-white min-h-screen">
+      {/* Hero Section */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
+        <AnimatedSection>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <motion.h1 
+                className="text-5xl font-extrabold text-gray-dark leading-tight"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                From <span className="text-purple-600">Data Black Hole</span> to Commercial Clarity
+              </motion.h1>
+              <motion.p 
+                className="mt-6 text-xl text-gray-medium leading-relaxed"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                Standard claims data makes over <span className="font-bold text-purple-600">90% of your target patient populations invisible</span>. Our AI-powered Enrichment solution illuminates the entire market, transforming your commercial strategy from guesswork to precision.
+              </motion.p>
+              <motion.div
+                className="mt-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  Discover Your Hidden Market Potential
+                </button>
+              </motion.div>
+            </div>
+            
+            {/* Abstract Animation Visual */}
+            <div className="flex justify-center">
+              <motion.div 
+                className="relative w-96 h-96 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-3xl border border-purple-200 shadow-2xl overflow-hidden"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 0.6 }}
+              >
+                {/* Animated dots representing data transformation */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {[...Array(20)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute w-3 h-3 bg-gray-400 rounded-full"
+                      style={{
+                        left: `${20 + (i % 5) * 15}%`,
+                        top: `${20 + Math.floor(i / 5) * 15}%`,
+                      }}
+                      animate={{
+                        backgroundColor: ['#9CA3AF', '#7C3AED', '#9CA3AF'],
+                        scale: [1, 1.5, 1],
+                      }}
+                      transition={{
+                        duration: 2,
+                        delay: i * 0.1,
+                        repeat: Infinity,
+                        repeatType: 'loop',
+                      }}
+                    />
+                  ))}
+                  
+                  {/* Scanning line */}
+                  <motion.div
+                    className="absolute w-1 h-full bg-gradient-to-b from-transparent via-purple-500 to-transparent"
+                    animate={{ x: [-200, 400] }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      repeatType: 'loop',
+                      ease: 'linear',
+                    }}
+                  />
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </AnimatedSection>
+      </div>
+
+      {/* The Data Chasm Section */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <AnimatedSection>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-extrabold text-gray-dark">
+              The Clinical Reality vs. <span className="text-purple-600">The Data Reality</span>
+            </h2>
+            <p className="mt-4 text-xl text-gray-medium max-w-4xl mx-auto">
+              You Can't Target What You Can't See
+            </p>
+          </div>
+
+          <div className="mb-12">
+            <p className="text-lg text-gray-600 max-w-4xl mx-auto text-center leading-relaxed">
+              The Breast Cancer Patient Journey is a complex decision tree based on disease stage, biomarker status, and lines of therapy. However, standard commercial data sources like medical claims are fundamentally insufficient to navigate this map, creating critical blind spots.
+            </p>
+          </div>
+
+          {/* Deficiencies Grid */}
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {[
+              {
+                icon: (
+                  <svg className="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                ),
+                title: "Missing Biomarker Status",
+                description: "Claims capture the billing code for a test, but almost never the result. We know a PIK3CA test was done, but not if the patient is mutated or wild-type."
+              },
+              {
+                icon: (
+                  <svg className="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                ),
+                title: "Absence of Disease Staging",
+                description: "There is no reliable field to distinguish between an early-stage and a metastatic patient—the crucial first split in the journey."
+              },
+              {
+                icon: (
+                  <svg className="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ),
+                title: "Incomplete Patient History",
+                description: "Key events like disease progression or treatment switches are not explicitly captured, making it impossible to pinpoint a patient's exact position."
+              }
+            ].map((item, index) => (
+              <div key={index} className="bg-white rounded-2xl p-8 border border-purple-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-purple-100 p-4 rounded-full mb-4">
+                    {item.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-dark mb-4">{item.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Shocking Statistic */}
+          <div className="text-center mb-12">
+            <div className="bg-gradient-to-r from-red-50 to-orange-50 border-l-4 border-red-500 rounded-2xl p-8 max-w-4xl mx-auto">
+              <p className="text-2xl font-bold text-red-700 mb-4">
+                For a drug like Truqap, where clinical literature suggests a ~40% PIK3CA mutation rate, raw claims data may show explicit results for less than 10% of tested patients.
+              </p>
+              <p className="text-3xl font-extrabold text-red-800">
+                This leaves over <span className="text-4xl">75%</span> of the potential market completely hidden.
+              </p>
+            </div>
+          </div>
+
+          {/* Data Visualization */}
+          <DataVisualization data={marketData} />
+
+          {/* Business Consequences */}
+          <div className="mt-16 text-center">
+            <h3 className="text-2xl font-bold text-gray-dark mb-8">This profound data gap means you are "flying blind," leading directly to:</h3>
+            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              {[
+                "Inaccurate Market Sizing",
+                "Massive Resource Misallocation", 
+                "Ineffective Strategy"
+              ].map((consequence, index) => (
+                <div key={index} className="bg-red-50 border border-red-200 rounded-xl p-6">
+                  <p className="text-lg font-semibold text-red-800">{consequence}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </AnimatedSection>
+      </div>
+
+      {/* Solution Section */}
+      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-gray-dark">
+                From a <span className="text-purple-600">Data Black Hole</span> to a High-Fidelity, Actionable Map
+              </h2>
+            </div>
+
+            <div className="max-w-4xl mx-auto mb-12">
+              <p className="text-lg text-gray-600 text-center leading-relaxed">
+                Our solution is a suite of sophisticated, machine learning-based <span className="font-bold text-purple-600">Enrichment Models</span>. These are purpose-built algorithms that learn the complex, subtle patterns within claims data—including treatment sequences, diagnostic codes, and care patterns—to predict missing clinical attributes with a high degree of precision and recall.
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-12">
+              <div className="bg-white rounded-2xl p-8 border border-purple-200 shadow-lg">
+                <div className="flex items-start space-x-4 mb-6">
+                  <div className="bg-purple-100 p-3 rounded-full">
+                    <svg className="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-dark mb-2">For Niche Biomarkers (PIK3CA, gBRCA)</h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      Our models identify "look-alike" patients who, based on their entire clinical journey, have a high probability of carrying the mutation, even without an explicit lab result.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-8 border border-purple-200 shadow-lg">
+                <div className="flex items-start space-x-4 mb-6">
+                  <div className="bg-indigo-100 p-3 rounded-full">
+                    <svg className="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-dark mb-2">For Emerging Biomarkers (HER2-Low)</h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      For biomarkers with zero presence in claims, we employ an advanced methodology. We link claims data to external lab datasets to create a "seed" population, then build a powerful predictive model to identify the rest of the population within the broader database.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Impact Section */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <AnimatedSection>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-extrabold text-gray-dark">
+              We Bridged the <span className="text-purple-600">Data Chasm</span>
+            </h2>
+            <p className="mt-4 text-xl text-gray-medium">
+              Turning an Untargetable Market into a Core Strategic Asset
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {[
+              {
+                stat: "35x",
+                subtitle: "VISIBILITY MULTIPLIER",
+                title: "BIOMARKER IDENTIFICATION BREAKTHROUGH",
+                description: "For the PIK3CA & BRCA markets (relevant for Truqap and Lynparza), we increased the identifiable patient pool from less than 1% to ~35% for PIK3CA and ~7% for BRCA.",
+                highlight: "From invisible to actionable"
+              },
+              {
+                stat: "50%",
+                subtitle: "MARKET BUILT FROM ZERO",
+                title: "HER2-LOW MARKET CREATION",
+                description: "For the emerging HER2-Low market (critical for Enhertu), we moved from zero visibility to over 50% identification, essentially building the market view from scratch.",
+                highlight: "Entirely new market segment"
+              },
+              {
+                stat: "90%",
+                subtitle: "COVERAGE ACHIEVED",
+                title: "FOUNDATIONAL SEGMENT MASTERY",
+                description: "We significantly strengthened foundational segments, bringing HR+ patient identification to ~90% and nearly quadrupling visibility into the HER2+ population.",
+                highlight: "Near-complete market coverage"
+              }
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                className="bg-white rounded-2xl p-8 border border-purple-200 shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="mb-6">
+                  <div className="text-6xl font-extrabold text-purple-600 mb-2">
+                    {item.stat}
+                  </div>
+                  <div className="text-sm font-semibold text-purple-500 uppercase tracking-wide">
+                    {item.subtitle}
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <h3 className="text-lg font-bold text-gray-dark mb-2">{item.title}</h3>
+                  <div className="inline-block bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium">
+                    {item.highlight}
+                  </div>
+                </div>
+                <p className="text-gray-600 leading-relaxed text-sm">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </AnimatedSection>
+      </div>
+
+      {/* Ultimate Value Section */}
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center text-white">
+              <h2 className="text-4xl font-extrabold mb-8">
+                Enriched Data is Not Just an Exercise; It's the Enabler of Your Entire Commercial Strategy
+              </h2>
+              
+              <div className="max-w-4xl mx-auto mb-12">
+                <p className="text-xl leading-relaxed opacity-90">
+                  This newfound clarity is the critical first step that unlocks a new level of strategic execution. By transforming the data to reflect clinical reality, we empower you to:
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-8 mb-12">
+                {[
+                  {
+                    number: "1",
+                    title: "Accurately Size and Define Markets",
+                    description: "Understand the true, addressable patient opportunity for every single indication."
+                  },
+                  {
+                    number: "2", 
+                    title: "Identify High-Potential HCPs",
+                    description: "Find the specific oncologists treating the precise patient subtypes relevant to each brand."
+                  },
+                  {
+                    number: "3",
+                    title: "Enable Precision Targeting",
+                    description: "Possess the granular, patient-level intelligence required to power sophisticated segmentation and next-best-action models."
+                  }
+                ].map((item, index) => (
+                  <div key={index} className="bg-white bg-opacity-10 rounded-2xl p-6 backdrop-blur-sm border border-white border-opacity-20">
+                    <div className="text-3xl font-bold mb-4">{item.number}</div>
+                    <h3 className="text-xl font-bold mb-4">{item.title}</h3>
+                    <p className="opacity-90 leading-relaxed">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-white bg-opacity-10 rounded-2xl p-8 backdrop-blur-sm border border-white border-opacity-20 max-w-4xl mx-auto">
+                <h3 className="text-2xl font-bold mb-4">Looking Ahead</h3>
+                <p className="text-lg opacity-90 leading-relaxed">
+                  This high-fidelity map solves the <em>identification</em> problem. It then becomes the foundation for solving the next great challenge: <strong>Intelligent Orchestration</strong>—knowing precisely what to talk about, and in what order, for every HCP interaction.
+                </p>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </div>
+
+      {/* Final CTA Section */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <AnimatedSection>
+          <div className="text-center max-w-4xl mx-auto">
+            <h2 className="text-4xl font-extrabold text-gray-dark mb-8">
+              Are You Ready to Navigate Your Market with <span className="text-purple-600">Precision</span>?
+            </h2>
+            <p className="text-xl text-gray-medium mb-12 leading-relaxed">
+              Stop making strategic decisions based on an incomplete picture. Let us help you illuminate the hidden patient populations in your market and provide your teams with the intelligent GPS they need to win.
+            </p>
+            <motion.button
+              className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-12 py-4 rounded-full font-bold text-xl hover:shadow-2xl transition-all duration-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Schedule a Demo to See Your Data Transformed
+            </motion.button>
+          </div>
+        </AnimatedSection>
+      </div>
+    </div>
+  );
+};
+
 const tableData = [
   { territory: 'California', spend: -10, revenue: 2, profit: 8, roi: 2.7, mroi: 0.7 },
   { territory: 'Texas', spend: 20, revenue: 60, profit: 38, roi: 5.2, mroi: 2.2 },
@@ -897,11 +3796,14 @@ const Hero = () => {
 
 const Navbar = () => {
   const navLinks = [
-    { name: "Commercial Budget Optimization", href: "#" },
+    { name: "Data Enrichment", href: "#data-enrichment" },
+    { name: "AutoML", href: "#automl" },
+    { name: "HCP Precision Targeting", href: "#hcp-targeting" },
+    { name: "Pharma BYOB", href: "#pharma-byob" },
+    { name: "Commercial Budget Optimization", href: "#commercial-budget" },
     { name: "Sales Force Sizing", href: "#field-force-sizing" },
     { name: "HCP Call Planning", href: "#" },
     { name: "REP Planner", href: "#" },
-    { name: "Pharma BYOB", href: "#" },
     { name: "Portfolio Use Case", href: "#" }
   ];
 
@@ -920,6 +3822,12 @@ const Navbar = () => {
               <a
                 key={index}
                 href={link.href}
+                onClick={(e) => {
+                  if (link.href.startsWith('#')) {
+                    e.preventDefault();
+                    window.location.hash = link.href;
+                  }
+                }}
                 className="text-gray-500 hover:text-primary transition-colors duration-300 px-3 py-2 rounded-md text-sm font-medium"
               >
                 {link.name}
@@ -934,6 +3842,79 @@ const Navbar = () => {
 
 const App = () => {
   const [isROIOptimizationActive, setIsROIOptimizationActive] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState('data-enrichment');
+  
+  // Handle navigation
+  React.useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.substring(1);
+      if (hash === 'data-enrichment' || hash === 'automl' || hash === 'hcp-targeting' || hash === 'pharma-byob' || hash === 'commercial-budget' || hash === 'field-force-sizing') {
+        setCurrentPage(hash);
+      } else {
+        setCurrentPage('data-enrichment');
+      }
+    };
+
+    // Set initial page based on hash
+    handleHashChange();
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // If we're on data enrichment page, render only that
+  if (currentPage === 'data-enrichment') {
+    return (
+      <div className="min-h-screen bg-gray-light font-sans">
+        <Navbar />
+        <div id="data-enrichment">
+          <DataEnrichment />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // If we're on AutoML page, render only that
+  if (currentPage === 'automl') {
+    return (
+      <div className="min-h-screen bg-gray-light font-sans">
+        <Navbar />
+        <div id="automl">
+          <AutoML />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // If we're on HCP Targeting page, render only that
+  if (currentPage === 'hcp-targeting') {
+    return (
+      <div className="min-h-screen bg-gray-light font-sans">
+        <Navbar />
+        <div id="hcp-targeting">
+          <HCPTargeting />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // If we're on Pharma BYOB page, render only that
+  if (currentPage === 'pharma-byob') {
+    return (
+      <div className="min-h-screen bg-gray-light font-sans">
+        <Navbar />
+        <div id="pharma-byob">
+          <PharmaBYOB />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
   
   const sections = [
     {
@@ -1022,7 +4003,7 @@ const App = () => {
     <div className="min-h-screen bg-gray-light font-sans">
       <Navbar />
       <Hero />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative">
+      <div id="commercial-budget" className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative">
         {/* Connecting vertical line for the first three sections */}
         <div className="absolute left-20 top-32 h-[60rem] w-1 bg-gray-300 z-0 hidden lg:block"></div>
         
