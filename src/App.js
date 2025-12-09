@@ -1179,36 +1179,113 @@ const HCPTargeting = () => {
       <div className="bg-gradient-to-b from-purple-50 to-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
           <AnimatedSection>
-            <div className="text-center max-w-4xl mx-auto">
-              <motion.h1
-                className="text-5xl font-extrabold text-gray-dark leading-tight"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                Precision HCP Targeting <span className="text-purple-600">Powered by AI</span>
-              </motion.h1>
-              <motion.p
-                className="mt-6 text-xl text-gray-medium leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                Transform static call plans into <span className="font-bold text-purple-600">dynamic, intelligent targeting</span>. Our AutoML-powered platform identifies high-potential HCPs and delivers real-time triggers to maximize field effectiveness.
-              </motion.p>
-              <motion.div
-                className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                  See HCP Targeting in Action
-                </button>
-                <button className="text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-purple-200 hover:bg-purple-50 transition-all duration-300">
-                  Learn More →
-                </button>
-              </motion.div>
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <motion.h1
+                  className="text-5xl font-extrabold text-gray-dark leading-tight"
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8 }}
+                >
+                  Precision HCP Targeting <span className="text-purple-600">Powered by AI</span>
+                </motion.h1>
+                <motion.p
+                  className="mt-6 text-xl text-gray-medium leading-relaxed"
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                >
+                  Transform static call plans into <span className="font-bold text-purple-600">dynamic, intelligent targeting</span>. Our AutoML-powered platform identifies high-potential HCPs and delivers real-time triggers to maximize field effectiveness.
+                </motion.p>
+                <motion.div
+                  className="mt-8 flex flex-col sm:flex-row gap-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    See HCP Targeting in Action
+                  </button>
+                  <button className="text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-purple-200 hover:bg-purple-50 transition-all duration-300">
+                    Learn More →
+                  </button>
+                </motion.div>
+              </div>
+
+              {/* HCP Targeting Visualization */}
+              <div className="flex justify-center">
+                <motion.div
+                  className="relative w-full max-w-[500px] h-96 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl border border-purple-200 shadow-2xl overflow-hidden p-8"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.6 }}
+                >
+                  {/* HCP Targeting Metrics Visualization */}
+                  <div className="flex flex-col h-full justify-center items-center">
+                    <div className="text-center mb-6">
+                      <div className="text-sm font-semibold text-purple-600 mb-2">AI-Powered HCP Targeting</div>
+                      <div className="text-4xl font-bold text-purple-700">2,847 HCPs</div>
+                      <div className="text-xs text-gray-600">156 High-Priority Triggers Active</div>
+                    </div>
+
+                    {/* Animated bars for targeting metrics */}
+                    <div className="w-full space-y-4">
+                      {[
+                        { label: 'Start Propensity', value: 92, color: 'bg-green-500' },
+                        { label: 'Stop Risk Detection', value: 88, color: 'bg-red-500' },
+                        { label: 'Behavioral Segmentation', value: 95, color: 'bg-indigo-500' },
+                        { label: 'Territory Optimization', value: 85, color: 'bg-purple-500' }
+                      ].map((item, index) => (
+                        <div key={item.label}>
+                          <div className="flex justify-between text-xs text-gray-600 mb-1">
+                            <span className="font-medium">{item.label}</span>
+                            <span>{item.value}%</span>
+                          </div>
+                          <motion.div
+                            className="h-3 bg-gray-200 rounded-full overflow-hidden"
+                            initial={{ width: 0 }}
+                            animate={{ width: '100%' }}
+                            transition={{ duration: 0.8, delay: 0.8 + index * 0.1 }}
+                          >
+                            <motion.div
+                              className={`h-full ${item.color} rounded-full`}
+                              initial={{ width: 0 }}
+                              animate={{ width: `${item.value}%` }}
+                              transition={{ duration: 1, delay: 1 + index * 0.1, ease: 'easeOut' }}
+                            />
+                          </motion.div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Animated icon at bottom */}
+                    <motion.div
+                      className="mt-6 w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg"
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        rotate: [0, 5, -5, 0]
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        repeatType: 'loop'
+                      }}
+                    >
+                      <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </motion.div>
+                  </div>
+
+                  {/* Background decoration */}
+                  <div className="absolute inset-0 opacity-10 pointer-events-none">
+                    <div className="absolute top-4 left-4 w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <div className="absolute top-8 right-12 w-1 h-1 bg-indigo-400 rounded-full"></div>
+                    <div className="absolute bottom-12 left-8 w-1.5 h-1.5 bg-purple-400 rounded-full"></div>
+                    <div className="absolute bottom-4 right-4 w-2 h-2 bg-indigo-400 rounded-full"></div>
+                  </div>
+                </motion.div>
+              </div>
             </div>
           </AnimatedSection>
         </div>
@@ -7974,7 +8051,7 @@ const Navbar = () => {
       ]
     },
     {
-      title: "Pharma BYOB",
+      title: "Decision Intelligence",
       items: [
         { name: "Pharma BYOB", href: "#pharma-byob" },
         { name: "REP Planner", href: "#rep-planner" },
