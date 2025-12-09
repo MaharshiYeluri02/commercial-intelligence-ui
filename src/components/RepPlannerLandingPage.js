@@ -95,13 +95,6 @@ const HeroSection = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white rounded-xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all"
-              >
-                See It In Action
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 text-purple-600 rounded-xl font-semibold text-lg border-2 border-purple-200 hover:bg-purple-50 transition-all"
               >
                 Request Demo
@@ -625,7 +618,6 @@ const PreCallBriefTab = () => {
       type: "In-Person",
       typeColor: "bg-green-500",
       rationale: "Dr. Carter has 45+ eligible Stage Ib-IIIA EGFR+ patients post-resection but only a 12% adoption rate. Clinical data shows ADAURA can reduce recurrence risk by 89%.",
-      impact: "+8-10 Potential New Patient Starts / Quarter",
       starter: '"Dr. Carter, I noticed your excellent EGFR testing rate of 78%. Given your focus on molecular testing and your significant post-surgical EGFR+ patient volume, I wanted to discuss how ADAURA\'s 89% recurrence risk reduction could benefit this specific patient group."',
       resource: "ADAURA Adjuvant Trial Data"
     },
@@ -634,7 +626,6 @@ const PreCallBriefTab = () => {
       type: "In-Person",
       typeColor: "bg-green-500",
       rationale: "New PFS data (25.5 months vs 16.7 months) for 1L advanced NSCLC. Perfect for her high-volume practice.",
-      impact: "+5-7 Potential New Patient Starts / Quarter",
       starter: '"Your recent paper on precision medicine in NSCLC caught my attention. The FLAURA2 combination data we just released aligns perfectly with your approach to personalized therapy - would love to get your thoughts."',
       resource: "FLAURA2 Combination Results"
     },
@@ -643,7 +634,6 @@ const PreCallBriefTab = () => {
       type: "Email",
       typeColor: "bg-blue-500",
       rationale: "Share blood-brain barrier penetration data relevant to her patients with brain metastases concerns.",
-      impact: "+2-3 Potential New Patient Starts / Quarter",
       starter: '"I see you\'ve been increasing your use of competitive TKIs. With the new FLAURA2 data showing superior PFS and enhanced CNS penetration, I\'d be interested in understanding what factors drive your current treatment decisions."',
       resource: "NSCLC Treatment Algorithm 2025"
     }
@@ -673,7 +663,6 @@ const PreCallBriefTab = () => {
             <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-r-lg mb-3">
               <p className="text-sm text-gray-700"><strong>Rationale:</strong> {playbook.rationale}</p>
             </div>
-            <p className="text-sm text-green-600 font-medium mb-3">Est. Impact: {playbook.impact}</p>
             <div className="bg-gray-50 rounded-lg p-3 mb-3">
               <p className="text-xs text-indigo-600 font-medium mb-1">Conversation Starter:</p>
               <p className="text-sm text-gray-700 italic">{playbook.starter}</p>
@@ -1030,8 +1019,8 @@ const RepCallPlanningDemo = () => {
               {/* HCP Cards */}
               <div className="lg:col-span-2 space-y-4">
                 {[
-                  { name: "HCP1", specialty: "Cardiologist", priority: "High Priority", priorityColor: "bg-red-100 text-red-700", current: { visits: 2, rx: 45 }, optimal: { visits: 4, rx: 72 }, impact: "+27 Rx (+60%)", insight: "Steep response after 3rd visit" },
-                  { name: "HCP2", specialty: "General Practitioner", priority: "Medium Priority", priorityColor: "bg-yellow-100 text-yellow-700", current: { visits: 1, rx: 28 }, optimal: { visits: 2, rx: 38 }, impact: "+10 Rx (+36%)", insight: "Quick saturation at 2 visits" }
+                  { name: "HCP1", specialty: "Cardiologist", priority: "High Priority", priorityColor: "bg-red-100 text-red-700", current: { visits: 2, rx: 45 }, optimal: { visits: 4, rx: 72 }, insight: "Steep response after 3rd visit" },
+                  { name: "HCP2", specialty: "General Practitioner", priority: "Medium Priority", priorityColor: "bg-yellow-100 text-yellow-700", current: { visits: 1, rx: 28 }, optimal: { visits: 2, rx: 38 }, insight: "Quick saturation at 2 visits" }
                 ].map((hcp, index) => (
                   <motion.div
                     key={index}
@@ -1050,7 +1039,7 @@ const RepCallPlanningDemo = () => {
                         {hcp.priority}
                       </span>
                     </div>
-                    <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="grid grid-cols-2 gap-4 mb-4">
                       <div className="text-center p-3 bg-gray-50 rounded-lg">
                         <p className="text-xs text-gray-500">Current ({hcp.current.visits} visits/month):</p>
                         <p className="text-2xl font-bold text-gray-900">{hcp.current.rx} Rx</p>
@@ -1058,10 +1047,6 @@ const RepCallPlanningDemo = () => {
                       <div className="text-center p-3 bg-blue-50 rounded-lg">
                         <p className="text-xs text-blue-600">Optimal ({hcp.optimal.visits} visits/month):</p>
                         <p className="text-2xl font-bold text-blue-600">{hcp.optimal.rx} Rx</p>
-                      </div>
-                      <div className="text-center p-3 bg-green-50 rounded-lg">
-                        <p className="text-xs text-green-600">Incremental Impact:</p>
-                        <p className="text-2xl font-bold text-green-600">{hcp.impact}</p>
                       </div>
                     </div>
                     <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-600">
@@ -1079,12 +1064,8 @@ const RepCallPlanningDemo = () => {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="text-lg font-semibold mb-1">Territory Optimization Impact</h4>
-                      <p className="text-indigo-100">Following simulation-based visit recommendations</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-4xl font-bold">+37 Rx/month</p>
-                      <p className="text-indigo-100">+48% territory growth</p>
+                      <h4 className="text-lg font-semibold mb-1">Territory Optimization</h4>
+                      <p className="text-indigo-100">AI-driven simulation-based visit recommendations optimize territory performance</p>
                     </div>
                   </div>
                 </motion.div>
@@ -1105,12 +1086,6 @@ const ValueProposition = () => {
     { step: "Ask → Discover", description: "Use Pharma BYOB to query your territory in natural language. Get AI-ranked HCP opportunities instantly.", icon: "💬", color: "indigo" },
     { step: "Click → Prepare", description: "Rep Planner delivers complete call preparation—playbooks, analytics, and profiles for every HCP.", icon: "📋", color: "purple" },
     { step: "Optimize → Maximize", description: "Rep Call Planning ensures you're visiting the right HCPs at the right frequency for maximum Rx impact.", icon: "📈", color: "blue" }
-  ];
-
-  const metrics = [
-    { value: "70", suffix: "%", label: "Reduction in call prep time" },
-    { value: "2.3", suffix: "x", label: "Improvement in HCP engagement" },
-    { value: "48", suffix: "%", label: "Territory growth with optimized visits" }
   ];
 
   return (
@@ -1139,20 +1114,6 @@ const ValueProposition = () => {
                 <h3 className="text-xl font-bold text-white mb-3">{pillar.step}</h3>
                 <p className="text-gray-300">{pillar.description}</p>
               </motion.div>
-            </AnimatedSection>
-          ))}
-        </div>
-
-        {/* Metrics */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {metrics.map((metric, index) => (
-            <AnimatedSection key={index} delay={index * 0.1 + 0.3}>
-              <div className="text-center">
-                <div className="text-5xl md:text-6xl font-extrabold text-white mb-2">
-                  <AnimatedCounter end={metric.value} suffix={metric.suffix} />
-                </div>
-                <p className="text-gray-400 text-lg">{metric.label}</p>
-              </div>
             </AnimatedSection>
           ))}
         </div>
@@ -1230,14 +1191,7 @@ const FinalCTA = () => {
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 bg-white text-indigo-600 rounded-xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all"
               >
-                Schedule a Live Demo
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-white/10 backdrop-blur-lg text-white rounded-xl font-semibold text-lg border border-white/30 hover:bg-white/20 transition-all"
-              >
-                Download Product Brief
+                Schedule a Demo
               </motion.button>
             </div>
           </div>

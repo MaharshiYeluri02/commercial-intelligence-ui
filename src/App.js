@@ -1197,19 +1197,6 @@ const HCPTargeting = () => {
                 >
                   Transform static call plans into <span className="font-bold text-purple-600">dynamic, intelligent targeting</span>. Our AutoML-powered platform identifies high-potential HCPs and delivers real-time triggers to maximize field effectiveness.
                 </motion.p>
-                <motion.div
-                  className="mt-8 flex flex-col sm:flex-row gap-4"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                  <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                    See HCP Targeting in Action
-                  </button>
-                  <button className="text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-purple-200 hover:bg-purple-50 transition-all duration-300">
-                    Learn More →
-                  </button>
-                </motion.div>
               </div>
 
               {/* HCP Targeting Visualization */}
@@ -2256,19 +2243,6 @@ const HCPChannelIndicationOptimizer = () => {
                   Beyond visit frequency — optimize <span className="font-bold text-purple-600">which channel</span> to use and <span className="font-bold text-indigo-600">what indications to prioritize</span> for every HCP interaction, maximizing engagement and ROI.
                 </motion.p>
 
-                <motion.div
-                  className="mt-8 flex flex-col sm:flex-row gap-4"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                  <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                    See Optimizer in Action
-                  </button>
-                  <button className="text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-purple-200 hover:bg-purple-50 transition-all duration-300">
-                    Explore Features →
-                  </button>
-                </motion.div>
               </div>
 
             {/* Two Key Capabilities */}
@@ -3164,24 +3138,6 @@ const HCPChannelIndicationOptimizer = () => {
               </div>
             </div>
 
-            {/* CTA */}
-            <div className="text-center mt-10">
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <motion.button 
-                  className="px-8 py-4 bg-white text-purple-600 font-bold rounded-xl hover:shadow-2xl transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  See Full HCP Recommendations
-                </motion.button>
-                <a 
-                  href="#commercial-budget"
-                  className="px-8 py-4 bg-purple-700/50 text-white font-semibold rounded-xl hover:bg-purple-700 transition-colors border-2 border-white/30 inline-block"
-                >
-                  ← Back to Budget Optimizer
-                </a>
-              </div>
-            </div>
           </div>
         </AnimatedSection>
       </div>
@@ -4078,19 +4034,6 @@ const AutoML = () => {
                 >
                   Introducing <span className="font-bold text-purple-600">AutoML</span>, the end-to-end platform that automates the entire model-building lifecycle. Purpose-built for pharma and life sciences, our engine automates data ingestion and domain-specific feature engineering, empowering your analytics teams to deliver insights at the speed of business.
                 </motion.p>
-                <motion.div
-                  className="mt-8 flex flex-col sm:flex-row gap-4"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                  <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                    See AutoML in Action
-                  </button>
-                  <button className="text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-purple-200 hover:bg-purple-50 transition-all duration-300">
-                    Explore Key Features →
-                  </button>
-                </motion.div>
               </div>
 
               {/* AutoML Pipeline Visual */}
@@ -6994,7 +6937,6 @@ const FieldForceSizing = () => {
                       </div>
                       <div className="text-right">
                         <div className="text-3xl font-bold text-accent">+37 Rx/month</div>
-                        <div className="text-sm text-gray-500">+48% territory growth</div>
                       </div>
                     </div>
                   </div>
@@ -7061,7 +7003,7 @@ const RxCoreLandingPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              End-to-end platform for pharma commercial teams: precision targeting, resource optimization, and field execution
+              End to end solutions for <span className="font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">pharma commercial teams</span>: precision targeting, resource optimization, and field execution
             </motion.p>
 
             {/* CTA Buttons */}
@@ -7081,10 +7023,10 @@ const RxCoreLandingPage = () => {
                 </svg>
               </a>
               <a
-                href="#impact"
+                href="#contact"
                 className="px-8 py-4 bg-white text-purple-600 rounded-xl font-semibold text-lg border-2 border-purple-200 hover:border-purple-400 hover:bg-purple-50 transition-all duration-300 shadow-sm"
               >
-                View Impact
+                Contact Us
               </a>
             </motion.div>
 
@@ -7933,19 +7875,6 @@ const Hero = () => {
               >
                 Stop guessing where to allocate your commercial budget. Our <span className="font-bold text-purple-600">AI-powered optimization engine</span> analyzes HCP-level response curves to find your optimal spend—maximizing revenue while eliminating waste beyond saturation points.
           </motion.p>
-          <motion.div
-                className="mt-8 flex flex-col sm:flex-row gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                  See Budget Optimizer in Action
-                </button>
-                <button className="text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-purple-200 hover:bg-purple-50 transition-all duration-300">
-                  Explore Key Features →
-                </button>
-          </motion.div>
             </div>
 
             {/* Budget Optimization Visual */}
@@ -8647,7 +8576,7 @@ const HCPCallPlan = () => {
           <AnimatedSection>
             <h2 className="text-4xl font-extrabold text-white mb-8">Ready to Empower Your Sales Team with AI?</h2>
             <p className="text-xl text-indigo-200 mb-10 max-w-2xl mx-auto">
-              See the platform in action. Schedule a live, personalized demo with one of our product experts today.
+              See the platform in action. Schedule a demo with one of our product experts today.
             </p>
             <button className="bg-white text-indigo-900 px-10 py-4 rounded-xl font-bold text-lg hover:bg-indigo-50 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
               Request Demo
@@ -10363,16 +10292,13 @@ const App = () => {
               Stop guessing. Start with data-driven confidence about exactly where your spend should go.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button 
+              <motion.button
                 className="px-8 py-4 bg-white text-purple-600 font-bold rounded-xl hover:shadow-2xl transition-all duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Schedule a Demo
               </motion.button>
-              <button className="px-8 py-4 bg-purple-700/50 text-white font-semibold rounded-xl hover:bg-purple-700 transition-colors border-2 border-white/30">
-                See Case Studies
-              </button>
         </div>
           </div>
         </AnimatedSection>
