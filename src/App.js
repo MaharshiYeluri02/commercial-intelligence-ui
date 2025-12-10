@@ -226,6 +226,15 @@ const PharmaBYOB = () => {
           <AnimatedSection>
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
+                <motion.div
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-100 border border-indigo-200 text-indigo-700 text-sm font-medium mb-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <span className="w-2 h-2 bg-indigo-600 rounded-full animate-pulse"></span>
+                  Pharma BYOB
+                </motion.div>
                 <motion.h1
                   className="text-5xl font-extrabold text-gray-dark leading-tight mb-6"
                   initial={{ opacity: 0, y: 20 }}
@@ -235,13 +244,23 @@ const PharmaBYOB = () => {
                   Go from Complex Business Question to <span className="text-indigo-600">Strategic Answer</span> in Seconds
                 </motion.h1>
                 <motion.p
-                  className="text-xl text-gray-medium leading-relaxed mb-8"
+                  className="text-xl text-gray-medium leading-relaxed mb-4"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                  Introducing <span className="font-bold text-indigo-600">Pharma BYOB</span>, the conversational analytics platform for pharma commercial teams. Stop waiting for static reports and BI queues. Start having a direct, intelligent conversation with your data and get the answers you need, when you need them.
+                  <span className="font-bold text-indigo-600">Pharma BYOB</span> - Your conversational analytics platform for pharma commercial teams. Stop waiting for static reports and BI queues. Start having a direct, intelligent conversation with your data and get the answers you need, when you need them.
                 </motion.p>
+                <motion.div
+                  className="bg-indigo-50 border-l-4 border-indigo-600 p-4 rounded-r-lg mb-8"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  <p className="text-sm text-indigo-800 font-medium">
+                    💡 Solution: Ask complex business questions in natural language and receive instant, data-driven answers with visualizations
+                  </p>
+                </motion.div>
                 <motion.div
                   className="flex flex-col sm:flex-row gap-4"
                   initial={{ opacity: 0, y: 20 }}
@@ -1181,6 +1200,15 @@ const HCPTargeting = () => {
           <AnimatedSection>
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
+                <motion.div
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 border border-purple-200 text-purple-700 text-sm font-medium mb-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <span className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></span>
+                  HCP Precision Targeting
+                </motion.div>
                 <motion.h1
                   className="text-5xl font-extrabold text-gray-dark leading-tight"
                   initial={{ opacity: 0, x: -50 }}
@@ -1190,13 +1218,23 @@ const HCPTargeting = () => {
                   Precision HCP Targeting <span className="text-purple-600">Powered by AI</span>
                 </motion.h1>
                 <motion.p
-                  className="mt-6 text-xl text-gray-medium leading-relaxed"
+                  className="mt-6 text-xl text-gray-medium leading-relaxed mb-4"
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
                 >
                   Transform static call plans into <span className="font-bold text-purple-600">dynamic, intelligent targeting</span>. Our AutoML-powered platform identifies high-potential HCPs and delivers real-time triggers to maximize field effectiveness.
                 </motion.p>
+                <motion.div
+                  className="bg-purple-50 border-l-4 border-purple-600 p-4 rounded-r-lg"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  <p className="text-sm text-purple-800 font-medium">
+                    💡 Solution: Predictive models rank HCPs by opportunity score, identify triggers, and create behavioral segments for precise targeting
+                  </p>
+                </motion.div>
               </div>
 
               {/* HCP Targeting Visualization */}
@@ -1208,60 +1246,71 @@ const HCPTargeting = () => {
                   transition={{ duration: 1, delay: 0.6 }}
                 >
                   {/* HCP Targeting Metrics Visualization */}
-                  <div className="flex flex-col h-full justify-center items-center">
+                  <div className="flex flex-col h-full justify-between p-2">
                     <div className="text-center mb-6">
-                      <div className="text-sm font-semibold text-purple-600 mb-2">AI-Powered HCP Targeting</div>
-                      <div className="text-4xl font-bold text-purple-700">2,847 HCPs</div>
-                      <div className="text-xs text-gray-600">156 High-Priority Triggers Active</div>
+                      <div className="text-sm font-semibold text-purple-600 mb-2">Your Territory</div>
+                      <div className="text-4xl font-bold text-purple-700">142 Accounts</div>
+                      <div className="text-xs text-gray-600">28 high-priority targets this month</div>
                     </div>
 
-                    {/* Animated bars for targeting metrics */}
-                    <div className="w-full space-y-4">
+                    {/* Key Metrics Grid */}
+                    <div className="grid grid-cols-2 gap-3 mb-4">
                       {[
-                        { label: 'Start Propensity', value: 92, color: 'bg-green-500' },
-                        { label: 'Stop Risk Detection', value: 88, color: 'bg-red-500' },
-                        { label: 'Behavioral Segmentation', value: 95, color: 'bg-indigo-500' },
-                        { label: 'Territory Optimization', value: 85, color: 'bg-purple-500' }
+                        { label: 'Visits This Week', value: '12', subtext: 'of 15 planned', color: 'bg-purple-600' },
+                        { label: 'Coverage Rate', value: '85%', subtext: 'vs 80% goal', color: 'bg-purple-600' },
+                        { label: 'Avg Opportunity', value: '87', subtext: 'score out of 100', color: 'bg-purple-600' },
+                        { label: 'Active Triggers', value: '16', subtext: 'need attention', color: 'bg-purple-600' }
                       ].map((item, index) => (
-                        <div key={item.label}>
-                          <div className="flex justify-between text-xs text-gray-600 mb-1">
-                            <span className="font-medium">{item.label}</span>
-                            <span>{item.value}%</span>
-                          </div>
-                          <motion.div
-                            className="h-3 bg-gray-200 rounded-full overflow-hidden"
-                            initial={{ width: 0 }}
-                            animate={{ width: '100%' }}
-                            transition={{ duration: 0.8, delay: 0.8 + index * 0.1 }}
-                          >
-                            <motion.div
-                              className={`h-full ${item.color} rounded-full`}
-                              initial={{ width: 0 }}
-                              animate={{ width: `${item.value}%` }}
-                              transition={{ duration: 1, delay: 1 + index * 0.1, ease: 'easeOut' }}
-                            />
-                          </motion.div>
-                        </div>
+                        <motion.div
+                          key={item.label}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+                          className="bg-white rounded-lg p-3 border-2 border-purple-200"
+                        >
+                          <div className="text-2xl font-bold text-purple-700">{item.value}</div>
+                          <div className="text-xs font-medium text-gray-700">{item.label}</div>
+                          <div className="text-xs text-gray-500 mt-1">{item.subtext}</div>
+                        </motion.div>
                       ))}
                     </div>
 
-                    {/* Animated icon at bottom */}
-                    <motion.div
-                      className="mt-6 w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg"
-                      animate={{
-                        scale: [1, 1.1, 1],
-                        rotate: [0, 5, -5, 0]
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        repeatType: 'loop'
-                      }}
-                    >
-                      <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                    </motion.div>
+                    {/* Priority Distribution */}
+                    <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
+                      <div className="text-xs font-semibold text-gray-700 mb-2">Priority Distribution</div>
+                      <div className="flex items-center space-x-2">
+                        <div className="flex-1">
+                          <div className="flex h-3 rounded-full overflow-hidden bg-gray-100">
+                            <motion.div 
+                              className="bg-purple-700"
+                              initial={{ width: 0 }}
+                              animate={{ width: '20%' }}
+                              transition={{ duration: 1, delay: 1.2 }}
+                              title="High Priority"
+                            />
+                            <motion.div 
+                              className="bg-purple-500"
+                              initial={{ width: 0 }}
+                              animate={{ width: '35%' }}
+                              transition={{ duration: 1, delay: 1.3 }}
+                              title="Medium Priority"
+                            />
+                            <motion.div 
+                              className="bg-purple-300"
+                              initial={{ width: 0 }}
+                              animate={{ width: '45%' }}
+                              transition={{ duration: 1, delay: 1.4 }}
+                              title="Standard"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between text-xs text-gray-500 mt-2">
+                        <span className="flex items-center"><span className="w-2 h-2 bg-purple-700 rounded-full mr-1"></span>28 High</span>
+                        <span className="flex items-center"><span className="w-2 h-2 bg-purple-500 rounded-full mr-1"></span>50 Med</span>
+                        <span className="flex items-center"><span className="w-2 h-2 bg-purple-300 rounded-full mr-1"></span>64 Std</span>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Background decoration */}
@@ -2222,7 +2271,7 @@ const HCPChannelIndicationOptimizer = () => {
                   transition={{ duration: 0.6 }}
           >
                   <span className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></span>
-              Extension to Commercial Budget Optimizer
+              HCP Channel & Indication Optimizer
                 </motion.div>
 
                 <motion.h1
@@ -2235,13 +2284,23 @@ const HCPChannelIndicationOptimizer = () => {
                 </motion.h1>
 
                 <motion.p
-                  className="mt-6 text-xl text-gray-medium leading-relaxed"
+                  className="mt-6 text-xl text-gray-medium leading-relaxed mb-4"
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
                 >
                   Beyond visit frequency — optimize <span className="font-bold text-purple-600">which channel</span> to use and <span className="font-bold text-indigo-600">what indications to prioritize</span> for every HCP interaction, maximizing engagement and ROI.
                 </motion.p>
+                <motion.div
+                  className="bg-purple-50 border-l-4 border-purple-600 p-4 rounded-r-lg"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  <p className="text-sm text-purple-800 font-medium">
+                    💡 Solution: AI-driven optimization finds the perfect mix of F2F, virtual, email, and speaker programs, plus indication priority for each HCP
+                  </p>
+                </motion.div>
 
               </div>
 
@@ -3169,12 +3228,15 @@ const SpeakerProgramOptimization = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
         <AnimatedSection>
           <div className="text-center max-w-5xl mx-auto">
-            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-pink-100 to-purple-100 px-4 py-2 rounded-full mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-              <span className="text-sm font-semibold text-pink-700">AI/ML-Driven Solution</span>
-            </div>
+            <motion.div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-100 border border-pink-200 text-pink-700 text-sm font-medium mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="w-2 h-2 bg-pink-600 rounded-full animate-pulse"></span>
+              Speaker Program Optimization
+            </motion.div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 mb-6">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600">
@@ -3182,9 +3244,15 @@ const SpeakerProgramOptimization = () => {
               </span>
             </h1>
 
-            <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl sm:text-2xl text-gray-600 mb-4 max-w-4xl mx-auto leading-relaxed">
               AI/ML-driven HCP recommendations to boost high-tier attendance and prescriber participation in speaker programs
             </p>
+            
+            <div className="bg-pink-50 border-l-4 border-pink-600 p-4 rounded-r-lg mb-8 max-w-4xl mx-auto">
+              <p className="text-sm text-pink-800 font-medium">
+                💡 Solution: Machine learning models identify which HCPs to invite based on predicted attendance probability and Rx lift potential
+              </p>
+            </div>
 
             {/* Value Proposition Funnel Visual */}
             <div className="bg-white rounded-3xl shadow-2xl p-8 mt-12 border border-gray-100">
@@ -4018,6 +4086,15 @@ const AutoML = () => {
           <AnimatedSection>
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
+                <motion.div
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 border border-purple-200 text-purple-700 text-sm font-medium mb-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <span className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></span>
+                  AutoML
+                </motion.div>
                 <motion.h1
                   className="text-5xl font-extrabold text-gray-dark leading-tight"
                   initial={{ opacity: 0, x: -50 }}
@@ -4027,13 +4104,23 @@ const AutoML = () => {
                   Build Custom Commercial Models <span className="text-purple-600">70% Faster</span>
                 </motion.h1>
                 <motion.p
-                  className="mt-6 text-xl text-gray-medium leading-relaxed"
+                  className="mt-6 text-xl text-gray-medium leading-relaxed mb-4"
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                  Introducing <span className="font-bold text-purple-600">AutoML</span>, the end-to-end platform that automates the entire model-building lifecycle. Purpose-built for pharma and life sciences, our engine automates data ingestion and domain-specific feature engineering, empowering your analytics teams to deliver insights at the speed of business.
+                  <span className="font-bold text-purple-600">AutoML</span> - The end-to-end platform that automates the entire model-building lifecycle. Purpose-built for pharma and life sciences, our engine automates data ingestion and domain-specific feature engineering, empowering your analytics teams to deliver insights at the speed of business.
                 </motion.p>
+                <motion.div
+                  className="bg-purple-50 border-l-4 border-purple-600 p-4 rounded-r-lg"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  <p className="text-sm text-purple-800 font-medium">
+                    💡 Solution: Automated data ingestion, feature engineering, model training, and deployment for predictive, segmentation, and enrichment models
+                  </p>
+                </motion.div>
               </div>
 
               {/* AutoML Pipeline Visual */}
@@ -5163,6 +5250,15 @@ const DataEnrichment = () => {
         <AnimatedSection>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
+              <motion.div
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 border border-purple-200 text-purple-700 text-sm font-medium mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <span className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></span>
+                Data Enrichment
+              </motion.div>
               <motion.h1
                 className="text-5xl font-extrabold text-gray-dark leading-tight"
                 initial={{ opacity: 0, x: -50 }}
@@ -5172,7 +5268,7 @@ const DataEnrichment = () => {
                 From <span className="text-purple-600">Data Black Hole</span> to Commercial Clarity
               </motion.h1>
               <motion.p
-                className="mt-6 text-xl text-gray-medium leading-relaxed"
+                className="mt-6 text-xl text-gray-medium leading-relaxed mb-4"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
@@ -5180,10 +5276,20 @@ const DataEnrichment = () => {
                 Standard claims data makes over <span className="font-bold text-purple-600">90% of your target patient populations invisible</span>. Our AI-powered Enrichment solution illuminates the entire market, transforming your commercial strategy from guesswork to precision.
               </motion.p>
               <motion.div
+                className="bg-purple-50 border-l-4 border-purple-600 p-4 rounded-r-lg mb-6"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                <p className="text-sm text-purple-800 font-medium">
+                  💡 Solution: AI models enrich raw claims data with biomarkers, line of therapy, and patient characteristics hidden from standard analysis
+                </p>
+              </motion.div>
+              <motion.div
                 className="mt-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
               >
                 <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                   Discover Your Hidden Market Potential
@@ -5253,308 +5359,10 @@ const DataEnrichment = () => {
             <p className="mt-4 text-xl text-gray-medium max-w-5xl mx-auto leading-relaxed">
               The EHR data like <span className="font-semibold text-gray-dark">Tempus, Flatiron</span> has the coverage problem.
             </p>
-            <div className="mt-8 inline-block bg-gradient-to-r from-purple-100 to-indigo-100 border-2 border-purple-300 rounded-2xl px-8 py-4">
-              <p className="text-2xl font-bold text-purple-700">
-                We bridge the gap of patient coverage and event capture rate to help with your targeting
-              </p>
-              <p className="mt-3 text-lg text-gray-700">
-                We specialise in <span className="font-semibold">complex oncology</span> and <span className="font-semibold">biopharmaceutical portfolios</span>
-              </p>
-            </div>
           </div>
 
-          {/* Container to control visual order - comparison cards first, then matrix */}
-          <div className="flex flex-col-reverse">
-            {/* This will appear SECOND visually - The Critical Gap Matrix */}
-            <div className="mb-20">
-              <div className="text-center mb-8">
-                <h3 className="text-4xl font-extrabold text-gray-dark mb-4">
-                  Bridging the Gap: <span className="text-purple-600">The Best of Both Worlds</span>
-                </h3>
-                <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                  We combine the <span className="font-semibold text-blue-600">broad patient coverage of Claims</span> with the <span className="font-semibold text-orange-600">rich clinical detail of EHR</span> to deliver <span className="font-bold text-green-600">Complete Intelligence</span>
-                </p>
-              </div>
-
-              {/* Simple Formula Presentation */}
-              <div className="flex items-center justify-center">
-                <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-green-50 rounded-3xl px-12 py-8 shadow-2xl border-2 border-purple-200">
-                  <p className="text-2xl font-bold text-gray-800 text-center">
-                    <span className="text-blue-600">Claims (Broad Reach)</span>
-                    <span className="text-purple-600 mx-3">+</span>
-                    <span className="text-orange-600">EHR (Rich Detail)</span>
-                    <span className="text-purple-600 mx-3">=</span>
-                    <span className="text-green-600">Enriched Data (Complete Intelligence)</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* This will appear FIRST visually - Two Incomplete Pictures */}
-            <div className="mb-20">
-              <h3 className="text-3xl font-bold text-gray-dark text-center mb-12">
-                Two Incomplete Pictures
-              </h3>
-              <div className="grid lg:grid-cols-2 gap-10">
-                {/* Claims Data - Good Coverage, Poor Event Capture */}
-                <div className="bg-white rounded-3xl p-10 shadow-xl border-2 border-purple-200">
-                  <div className="flex items-center justify-center mb-6">
-                    <div className="bg-purple-100 rounded-2xl p-4">
-                      <svg className="w-10 h-10 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <h4 className="text-2xl font-bold text-purple-900 mb-3 text-center">Claims Data</h4>
-                  <p className="text-center text-gray-600 mb-10 leading-relaxed text-sm">
-                    Good patient coverage, but critical events like <span className="font-semibold">Mutations</span> and <span className="font-semibold">Lab Results</span> have almost zero capture
-                  </p>
-
-                  {/* Visual comparison meters */}
-                  <div className="space-y-8">
-                    <div className="bg-purple-50 rounded-2xl p-6 border border-purple-100">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-bold text-gray-800 uppercase tracking-wide">Patient Coverage</span>
-                        <span className="text-2xl font-black text-purple-600">95%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-2xl h-8 relative overflow-hidden">
-                        <motion.div
-                          className="h-full bg-gradient-to-r from-purple-500 to-purple-600 flex items-center justify-end pr-4"
-                          initial={{ width: 0 }}
-                          animate={{ width: '95%' }}
-                          transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
-                        >
-                          <svg className="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                          <span className="text-white font-bold text-sm">Excellent</span>
-                        </motion.div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-center">
-                      <div className="bg-amber-50 border-2 border-amber-400 rounded-2xl px-8 py-3">
-                        <div className="text-center flex items-center space-x-2">
-                          <svg className="w-6 h-6 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                            </svg>
-                          <span className="text-amber-700 font-black text-lg tracking-wider">THE GAP</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-purple-50 rounded-2xl p-6 border border-purple-100">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-bold text-gray-800 uppercase tracking-wide">Event Capture Rate</span>
-                        <span className="text-2xl font-black text-amber-600">27%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-2xl h-8 relative overflow-hidden">
-                        <motion.div
-                          className="h-full bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-end pr-4"
-                          initial={{ width: 0 }}
-                          animate={{ width: '27%' }}
-                          transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
-                        >
-                          <svg className="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                          </svg>
-                          <span className="text-white font-bold text-xs">Poor</span>
-                        </motion.div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Event breakdown */}
-                  <div className="mt-10 bg-gray-50 rounded-2xl p-6 border border-gray-200">
-                    <p className="text-sm font-bold text-gray-800 mb-5 uppercase tracking-wide">Event Capture Breakdown:</p>
-                    {[
-                      { 
-                        name: 'Mutations', 
-                        captured: 2, 
-                        icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                      },
-                      { 
-                        name: 'Treatments', 
-                        captured: 45, 
-                        icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 008 10.586V5L7 4z" /></svg>
-                      },
-                      { 
-                        name: 'Lab Results', 
-                        captured: 0, 
-                        icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-                      },
-                      { 
-                        name: 'Diagnosis', 
-                        captured: 55, 
-                        icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
-                      },
-                      { 
-                        name: 'Other Events', 
-                        captured: 35, 
-                        icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                      }
-                    ].map((event, idx) => (
-                      <motion.div
-                        key={idx}
-                        className="mb-4 last:mb-0 bg-white rounded-xl p-4 border border-gray-100"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.8 + idx * 0.1 }}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-semibold text-gray-700 flex items-center">
-                            <span className="mr-3 text-purple-600">{event.icon}</span>
-                            {event.name}
-                          </span>
-                          <span className="text-sm font-bold text-amber-600">{event.captured}%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <motion.div
-                            className="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full"
-                            initial={{ width: 0 }}
-                            animate={{ width: `${event.captured}%` }}
-                            transition={{ duration: 0.8, delay: 0.9 + idx * 0.1 }}
-                          />
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* EHR Data - Rich Detail, Limited Coverage */}
-                <div className="bg-white rounded-3xl p-10 shadow-xl border-2 border-indigo-200">
-                  <div className="flex items-center justify-center mb-6">
-                    <div className="bg-indigo-100 rounded-2xl p-4">
-                      <svg className="w-10 h-10 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 008 10.586V5L7 4z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <h4 className="text-2xl font-bold text-indigo-900 mb-3 text-center">EHR Data</h4>
-                  <p className="text-center text-gray-600 mb-3 leading-relaxed text-sm">
-                    <span className="font-semibold">Tempus, Flatiron</span>
-                  </p>
-                  <p className="text-center text-gray-600 mb-10 leading-relaxed text-sm">
-                    Rich clinical detail but limited patient coverage
-                  </p>
-
-                  {/* Visual comparison meters */}
-                  <div className="space-y-8">
-                    <div className="bg-indigo-50 rounded-2xl p-6 border border-indigo-100">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-bold text-gray-800 uppercase tracking-wide">Patient Coverage</span>
-                        <span className="text-2xl font-black text-amber-600">10%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-2xl h-8 relative overflow-hidden">
-                        <motion.div
-                          className="h-full bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-end pr-4"
-                          initial={{ width: 0 }}
-                          animate={{ width: '10%' }}
-                          transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
-                        >
-                          <svg className="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                          </svg>
-                          <span className="text-white font-bold text-xs">Limited</span>
-                        </motion.div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-center">
-                      <div className="bg-amber-50 border-2 border-amber-400 rounded-2xl px-8 py-3">
-                        <div className="text-center flex items-center space-x-2">
-                          <svg className="w-6 h-6 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                            </svg>
-                          <span className="text-amber-700 font-black text-lg tracking-wider">THE GAP</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-indigo-50 rounded-2xl p-6 border border-indigo-100">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-bold text-gray-800 uppercase tracking-wide">Event Capture Rate</span>
-                        <span className="text-2xl font-black text-indigo-600">90%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-2xl h-8 relative overflow-hidden">
-                        <motion.div
-                          className="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 flex items-center justify-end pr-4"
-                          initial={{ width: 0 }}
-                          animate={{ width: '90%' }}
-                          transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
-                        >
-                          <svg className="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                          <span className="text-white font-bold text-sm">Excellent</span>
-                        </motion.div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Event breakdown */}
-                  <div className="mt-10 bg-gray-50 rounded-2xl p-6 border border-gray-200">
-                    <p className="text-sm font-bold text-gray-800 mb-5 uppercase tracking-wide">Event Capture Breakdown:</p>
-                    {[
-                      { 
-                        name: 'Mutations', 
-                        captured: 92, 
-                        icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                      },
-                      { 
-                        name: 'Treatments', 
-                        captured: 88, 
-                        icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 008 10.586V5L7 4z" /></svg>
-                      },
-                      { 
-                        name: 'Lab Results', 
-                        captured: 94, 
-                        icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-                      },
-                      { 
-                        name: 'Diagnosis', 
-                        captured: 85, 
-                        icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
-                      },
-                      { 
-                        name: 'Other Events', 
-                        captured: 82, 
-                        icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                      }
-                    ].map((event, idx) => (
-                      <motion.div
-                        key={idx}
-                        className="mb-4 last:mb-0 bg-white rounded-xl p-4 border border-gray-100"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.8 + idx * 0.1 }}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-semibold text-gray-700 flex items-center">
-                            <span className="mr-3 text-indigo-600">{event.icon}</span>
-                            {event.name}
-                          </span>
-                          <span className="text-sm font-bold text-indigo-600">{event.captured}%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <motion.div
-                            className="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full"
-                            initial={{ width: 0 }}
-                            animate={{ width: `${event.captured}%` }}
-                            transition={{ duration: 0.8, delay: 0.9 + idx * 0.1 }}
-                          />
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* End of flex-col-reverse container */}
-
-          {/* Deficiencies Grid */}
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          {/* Deficiencies Grid - Moved Above */}
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
             {[
               {
                 icon: (
@@ -5594,6 +5402,343 @@ const DataEnrichment = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Two Incomplete Pictures - With Icons */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-gray-dark text-center mb-8">
+              Two Incomplete Pictures
+            </h3>
+            <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+              {/* Claims Data Card */}
+              <div className="bg-white rounded-2xl p-10 border-2 border-blue-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-blue-100 p-6 rounded-full mb-6">
+                    <svg className="h-16 w-16 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-dark mb-4">Claims Data</h3>
+                  <div className="w-full space-y-3">
+                    <div className="flex items-center justify-between px-4">
+                      <span className="text-sm text-gray-600">Coverage</span>
+                      <span className="text-lg font-bold text-emerald-600">95%</span>
+                    </div>
+                    <div className="flex items-center justify-between px-4">
+                      <span className="text-sm text-gray-600">Event Capture</span>
+                      <span className="text-lg font-bold text-red-600">27%</span>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <div className="grid grid-cols-2 gap-3 text-sm px-4">
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Mutations</span>
+                          <span className="font-semibold text-red-600">2%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Treatments</span>
+                          <span className="font-semibold text-amber-600">45%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Lab Results</span>
+                          <span className="font-semibold text-red-600">0%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Diagnosis</span>
+                          <span className="font-semibold text-amber-600">55%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* EHR Data Card */}
+              <div className="bg-white rounded-2xl p-10 border-2 border-orange-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-orange-100 p-6 rounded-full mb-6">
+                    <svg className="h-16 w-16 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 008 10.586V5L7 4z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-dark mb-4">EHR Data <span className="text-sm font-normal text-gray-500">(Tempus, Flatiron)</span></h3>
+                  <div className="w-full space-y-3">
+                    <div className="flex items-center justify-between px-4">
+                      <span className="text-sm text-gray-600">Coverage</span>
+                      <span className="text-lg font-bold text-red-600">10%</span>
+                    </div>
+                    <div className="flex items-center justify-between px-4">
+                      <span className="text-sm text-gray-600">Event Capture</span>
+                      <span className="text-lg font-bold text-emerald-600">90%</span>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <div className="grid grid-cols-2 gap-3 text-sm px-4">
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Mutations</span>
+                          <span className="font-semibold text-emerald-600">92%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Treatments</span>
+                          <span className="font-semibold text-emerald-600">88%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Lab Results</span>
+                          <span className="font-semibold text-emerald-600">94%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Diagnosis</span>
+                          <span className="font-semibold text-emerald-600">85%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bridging the Gap - Visual Illustration */}
+          <div className="mb-12 relative">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-gray-dark mb-4">
+                Bridging the Gap: <span className="text-purple-600">The Best of Both Worlds</span>
+              </h3>
+              
+              {/* Value Proposition Card */}
+              <div className="mt-6 inline-block bg-gradient-to-r from-purple-100 to-indigo-100 border-2 border-purple-300 rounded-2xl px-8 py-4 shadow-lg">
+                <p className="text-xl font-bold text-purple-700">
+                  We bridge the gap of patient coverage and event capture rate to help with your targeting
+                </p>
+                <p className="mt-3 text-base text-gray-700">
+                  We specialise in <span className="font-semibold">complex oncology</span> and <span className="font-semibold">biopharmaceutical portfolios</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Visual Flow - Simplified and More Visual */}
+            <div className="max-w-7xl mx-auto">
+              <div className="flex items-center justify-center gap-6">
+                
+                {/* Claims Data Box - Compact */}
+                <motion.div 
+                  className="relative flex-1 max-w-xs"
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border-2 border-blue-200 shadow-lg">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="bg-blue-500 p-4 rounded-full mb-4">
+                        <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                      <h4 className="text-lg font-bold text-gray-900">Claims Data</h4>
+                      <p className="text-sm text-gray-600 font-semibold mb-4">Broad Reach</p>
+                      <div className="w-full space-y-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Coverage</span>
+                          <span className="font-bold text-xl text-emerald-600">95%</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Events</span>
+                          <span className="font-bold text-xl text-red-600">27%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Plus Icon with Animation */}
+                <motion.div 
+                  className="relative"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.3 }}
+                >
+                  <div className="bg-gradient-to-br from-purple-100 to-purple-200 p-4 rounded-full shadow-md">
+                    <svg className="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
+                </motion.div>
+
+                {/* EHR Data Box - Compact */}
+                <motion.div 
+                  className="relative flex-1 max-w-xs"
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-8 border-2 border-orange-200 shadow-lg">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="bg-orange-500 p-4 rounded-full mb-4">
+                        <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 008 10.586V5L7 4z" />
+                        </svg>
+                      </div>
+                      <h4 className="text-lg font-bold text-gray-900">EHR Data</h4>
+                      <p className="text-sm text-gray-600 font-semibold mb-4">Rich Detail</p>
+                      <div className="w-full space-y-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Coverage</span>
+                          <span className="font-bold text-xl text-red-600">10%</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Events</span>
+                          <span className="font-bold text-xl text-emerald-600">90%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Arrow Down to AI Bridge */}
+                <motion.div 
+                  className="absolute left-1/2 transform -translate-x-1/2"
+                  style={{ top: '100%', marginTop: '1rem' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.4, delay: 0.6 }}
+                >
+                  <svg className="w-8 h-8 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </motion.div>
+
+                {/* Equals Icon with Animation */}
+                <motion.div 
+                  className="relative"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.5 }}
+                >
+                  <div className="bg-gradient-to-br from-purple-100 to-purple-200 p-4 rounded-full shadow-md">
+                    <svg className="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 10h14M5 14h14" />
+                    </svg>
+                  </div>
+                </motion.div>
+
+                {/* Enriched Data Result Box - Compact with Glow */}
+                <motion.div 
+                  className="relative flex-1 max-w-xs"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.7 }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 to-emerald-500 rounded-2xl blur-xl opacity-30 animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-8 border-2 border-emerald-200 shadow-xl">
+                    <div className="absolute top-3 right-3">
+                      <motion.svg 
+                        className="w-6 h-6 text-yellow-400" 
+                        fill="currentColor" 
+                        viewBox="0 0 20 20"
+                        animate={{ rotate: [0, 360] }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </motion.svg>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                      <div className="bg-emerald-600 p-4 rounded-full mb-4">
+                        <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                      </div>
+                      <h4 className="text-lg font-bold text-gray-900">Enriched Data</h4>
+                      <p className="text-sm text-gray-600 font-semibold mb-4">Complete Intelligence</p>
+                      <div className="w-full space-y-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Coverage</span>
+                          <span className="font-bold text-xl text-emerald-600">90%</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Events</span>
+                          <span className="font-bold text-xl text-emerald-600">85%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+              </div>
+
+              {/* AI Process Bridge - More Visual, Less Text */}
+              <motion.div 
+                className="mt-12 max-w-4xl mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.9 }}
+              >
+                <div className="relative">
+                  {/* Connection Line from top */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 -top-8 w-0.5 h-8 bg-gradient-to-b from-purple-300 to-purple-500"></div>
+                  
+                  <div className="bg-gradient-to-r from-purple-50 via-indigo-50 to-purple-50 rounded-2xl p-6 border-2 border-purple-300 shadow-lg">
+                    <div className="text-center mb-4">
+                      <span className="inline-flex items-center px-4 py-1 rounded-full bg-purple-200 text-purple-800 text-xs font-bold">
+                        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M13 7H7v6h6V7z" />
+                          <path fillRule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2zM5 5h10v10H5V5z" clipRule="evenodd" />
+                        </svg>
+                        AI-Powered Enrichment Process
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center justify-center gap-4">
+                      {/* Step 1 */}
+                      <motion.div 
+                        className="flex flex-col items-center"
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        <div className="bg-gradient-to-br from-purple-200 to-purple-300 p-5 rounded-xl shadow-md mb-3">
+                          <svg className="w-10 h-10 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                          </svg>
+                        </div>
+                        <p className="text-sm font-bold text-gray-800 text-center">AI Models</p>
+                      </motion.div>
+
+                      {/* Arrow */}
+                      <svg className="w-7 h-7 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                      </svg>
+
+                      {/* Step 2 */}
+                      <motion.div 
+                        className="flex flex-col items-center"
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        <div className="bg-gradient-to-br from-purple-200 to-purple-300 p-5 rounded-xl shadow-md mb-3">
+                          <svg className="w-10 h-10 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                          </svg>
+                        </div>
+                        <p className="text-sm font-bold text-gray-800 text-center">Pattern<br/>Recognition</p>
+                      </motion.div>
+
+                      {/* Arrow */}
+                      <svg className="w-7 h-7 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                      </svg>
+
+                      {/* Step 3 */}
+                      <motion.div 
+                        className="flex flex-col items-center"
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        <div className="bg-gradient-to-br from-purple-200 to-purple-300 p-5 rounded-xl shadow-md mb-3">
+                          <svg className="w-10 h-10 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <p className="text-sm font-bold text-gray-800 text-center">Validation</p>
+                      </motion.div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </div>
 
           {/* Shocking Statistic */}
@@ -7982,9 +8127,9 @@ const Navbar = () => {
     {
       title: "Decision Intelligence",
       items: [
+        { name: "Brand Insights", href: "#brand-insights" },
         { name: "Pharma BYOB", href: "#pharma-byob" },
-        { name: "REP Planner", href: "#rep-planner" },
-        { name: "Brand Insights", href: "#brand-insights" }
+        { name: "REP Planner", href: "#rep-planner" }
       ]
     }
   ];
@@ -8599,6 +8744,15 @@ const BrandInsights = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
+              <motion.div
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 border border-purple-200 text-purple-700 text-sm font-medium mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <span className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></span>
+                Brand Insights
+              </motion.div>
               <motion.h1
                 className="text-5xl font-extrabold text-gray-dark leading-tight"
                 initial={{ opacity: 0, x: -50 }}
@@ -8608,18 +8762,28 @@ const BrandInsights = () => {
                 Real-Time Brand Intelligence <span className="text-purple-600">Across Every Level</span>
               </motion.h1>
               <motion.p
-                className="mt-6 text-xl text-gray-medium leading-relaxed"
+                className="mt-6 text-xl text-gray-medium leading-relaxed mb-4"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
                 A comprehensive <span className="font-bold text-purple-600">reporting and analytics layer</span> that transforms enriched data into actionable insights. Track key performance metrics—<span className="font-semibold">NPS, TRx, NRx</span>—from regional territories to national headquarters, with AI-powered predictions guiding every decision.
               </motion.p>
+              <motion.div
+                className="bg-purple-50 border-l-4 border-purple-600 p-4 rounded-r-lg mb-6"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                <p className="text-sm text-purple-800 font-medium">
+                  💡 Solution: Real-time dashboards track HCP trends, patient flow, and brand performance with AI-powered forecasting at every level
+                </p>
+              </motion.div>
           <motion.div
                 className="mt-8 grid grid-cols-3 gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
               >
                 {[
                   { 

@@ -80,7 +80,7 @@ const HeroSection = () => {
           >
             <div className="inline-flex items-center px-4 py-2 bg-purple-100 rounded-full text-purple-700 text-sm font-medium mb-6 border border-purple-200">
               <span className="w-2 h-2 bg-purple-600 rounded-full mr-2 animate-pulse"></span>
-              Pharma BYOB Extension
+              REP Planner
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
               Your AI Co-Pilot, Now With{' '}
@@ -88,9 +88,14 @@ const HeroSection = () => {
                 Complete HCP Intelligence
               </span>
             </h1>
-            <p className="text-xl text-gray-700 leading-relaxed mb-8">
+            <p className="text-xl text-gray-700 leading-relaxed mb-4">
               Rep Planner extends Pharma BYOB with deep physician insights, personalized meeting playbooks, and visit optimization—so every rep walks into every call fully prepared.
             </p>
+            <div className="bg-purple-50 border-l-4 border-purple-600 p-4 rounded-r-lg mb-6">
+              <p className="text-sm text-purple-800 font-medium">
+                💡 Solution: AI-powered HCP intelligence with 360° profiles, meeting playbooks, analytics, and visit optimization to maximize field rep effectiveness
+              </p>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -450,10 +455,10 @@ const BYOBHCPListDemo = () => {
             {/* Stats Bar */}
             <div className="grid grid-cols-4 border-b border-gray-200">
               {[
-                { value: "1,247", label: "Total HCPs", change: "+12%", icon: "👥" },
-                { value: "28", label: "High Priority", change: "+5", icon: "🎯" },
-                { value: "12", label: "This Week", change: "Planned", icon: "📅" },
-                { value: "78.4", label: "Avg Score", change: "+3.2", icon: "📈" }
+                { value: "142", label: "Accounts in Territory", change: "+8 this month", icon: "👥" },
+                { value: "28", label: "High Priority", change: "Top 20%", icon: "🎯" },
+                { value: "12", label: "Visits Planned", change: "This Week", icon: "📅" },
+                { value: "87", label: "Avg Opportunity Score", change: "+5 points", icon: "📈" }
               ].map((stat, i) => (
                 <div key={i} className="p-4 text-center border-r last:border-r-0 border-gray-200">
                   <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
